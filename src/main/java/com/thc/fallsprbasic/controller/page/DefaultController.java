@@ -1,4 +1,4 @@
-package com.thc.fallsprbasic.controller;
+package com.thc.fallsprbasic.controller.page;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
