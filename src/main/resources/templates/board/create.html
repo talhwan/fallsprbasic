@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+create
+
+<div id="div_id" class="div_abcde">
+    글 입력 테스트
+</div>
+제목
+<input type="text" id="create_board_title" />
+내용
+<input type="text" id="create_board_content" />
+작성자
+<input type="text" id="create_board_author" />
+
+<button onclick="create_board()">
+    저장
+</button>
+<button onclick="change_html()">
+    글 바꿔보기!
+</button>
+
+
+<script>
+    function change_html(){
+        let create_board_title = $("#create_board_title").val();
+        $("#div_id").html(create_board_title);
+    }
+    function create_board(){
+        $.ajax({
+            url: "/api/board/create",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                title : $("#create_board_title").val()
+                ,content : $("#create_board_content").val()
+                ,author : $("#create_board_author").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+
+</body>
+</html>

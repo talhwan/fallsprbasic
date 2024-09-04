@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+list
+
+<div id="div_list_board">
+</div>
+
+<button onclick="list_board()">
+    글 전체 목록
+</button>
+
+
+
+<script>
+    function list_board(){
+        $.ajax({
+            url: "/api/board/list",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {},
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+                for(let each of obj_data){
+                    $("#div_list_board").append(
+                        "<a href='/board/detail/"+each["order"]+"'>"+each["order"]+"</a>" + "//" + each["title"] + "<br/>"
+                    );
+                }
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+
+</body>
+</html>
