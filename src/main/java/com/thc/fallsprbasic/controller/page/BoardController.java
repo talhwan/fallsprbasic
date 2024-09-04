@@ -22,6 +22,7 @@ public class BoardController {
         return "board/" + page;
     }
 
+    //PathVariable을 여러개 쓸수 있음.. 대신 /가 있어야함!
     @GetMapping("/{page}/{id}")
     public String page2(@PathVariable String page, @PathVariable String id){
         return "board/" + page;
