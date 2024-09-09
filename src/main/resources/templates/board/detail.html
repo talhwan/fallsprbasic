@@ -8,10 +8,13 @@
 <body>
 detail
 
-<input type="text" id="detail_board_order" />
+<input type="text" id="detail_board_order" readonly/>
+<input type="text" id="detail_board_title" />
+<input type="text" id="detail_board_content" />
+<input type="text" id="detail_board_author" />
 
-<button onclick="detail_board()">
-    글 상세
+<button onclick="update_board()">
+    글 수정
 </button>
 
 <script>
@@ -38,6 +41,44 @@ detail
             },
             cache: false,
             success: (obj_data, status, xhr)=>{
+                /*
+                alert(JSON.stringify(obj_data));
+                {
+                    "resultCode":200,
+                    "detail_board":
+                    {"author":"33","title":"44444","content":"22","order":1}}
+                alert(obj_data["resultCode"]);
+                alert(obj_data["detail_board"]["order"]);
+                alert(obj_data["detail_board"]["title"]);
+                alert(obj_data["detail_board"]["content"]);
+                alert(obj_data["detail_board"]["author"]);
+                 */
+                //$("#detail_board_order").val(obj_data.order);
+                $("#detail_board_order").val(obj_data["detail_board"]["order"]);
+                $("#detail_board_title").val(obj_data["detail_board"]["title"]);
+                $("#detail_board_content").val(obj_data["detail_board"]["content"]);
+                $("#detail_board_author").val(obj_data["detail_board"]["author"]);
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+
+    function update_board(){
+        $.ajax({
+            url: "/api/board/update",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                order : final_id
+                ,title : $("#detail_board_title").val()
+                ,content : $("#detail_board_content").val()
+                ,author : $("#detail_board_author").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
             },
             error: (obj_data, status, xhr)=>{
@@ -46,8 +87,6 @@ detail
             }
         });
     }
-    /*
-    */
 </script>
 
 

@@ -51,4 +51,20 @@ public class BoardRestController {
 
         return resultMap;
     }
+    @GetMapping("/update")
+    public Map<String, Object> update(@RequestParam Map<String, Object> params){
+
+        int index = Integer.parseInt(params.get("order") + "") - 1;
+        Map<String, Object> boardMap = boardList.get(index);
+        boardMap.put("title", params.get("title"));
+        boardMap.put("content", params.get("content"));
+        boardMap.put("author", params.get("author"));
+        //boardList.add
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("resultCode", 200);
+        //resultMap.put("detail_board", boardMap);
+
+        return resultMap;
+    }
 }
