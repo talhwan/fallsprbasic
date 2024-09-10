@@ -31,7 +31,28 @@ public class BoardServiceImpl implements BoardService {
         return null;
     }
     @Override
+    public Map<String, Object> updateBoard(Map<String, Object> params) {
+        System.out.println("updateBoard");
+        Board board = boardRepository.findById(Integer.parseInt(params.get("id") + "")).orElseThrow(() -> new RuntimeException(""));
+
+        board.setTitle(params.get("title").toString());
+        board.setContent(params.get("content").toString());
+        board.setAuthor(params.get("author").toString());
+        boardRepository.save(board);
+        return null;
+    }
+    @Override
     public List<Board> listBoard() {
         return boardRepository.findAll();
+    }
+    @Override
+    public Board detailBoard(Integer id) {
+        return boardRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+    }
+    @Override
+    public Map<String, Object> deleteBoard(Integer id) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        boardRepository.delete(board);
+        return null;
     }
 }

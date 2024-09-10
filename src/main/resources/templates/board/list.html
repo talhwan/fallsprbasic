@@ -27,7 +27,7 @@ list
                 alert(JSON.stringify(obj_data));
                 for(let each of obj_data){
                     $("#div_list_board").append(
-                        "<a href='/board/detail/"+each["order"]+"'>"+each["order"]+"</a>" + "//" + each["title"] + "<br/>"
+                        "<a href='/board/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["title"] + "<br/>"
                     );
                 }
             },

@@ -23,7 +23,7 @@ public class BoardRestController {
         this.boardService = boardService;
     }
 
-    List<Map<String, Object>> boardList = new ArrayList<>();
+    //List<Map<String, Object>> boardList = new ArrayList<>();
     @GetMapping("/create")
     public Map<String, Object> create(@RequestParam Map<String, Object> params){
         return boardService.createBoard(params);
@@ -53,20 +53,21 @@ public class BoardRestController {
         //return boardList;
     }
     @GetMapping("/detail") //이 안에 있는 주소값은 꼭 유니크해야함!!
-    public Map<String, Object> detail(@RequestParam String order){
-
-        int index = Integer.parseInt(order) - 1;
+    public Board detail(@RequestParam Integer id){
+        return boardService.detailBoard(id);
+        /*int index = Integer.parseInt(order) - 1;
         Map<String, Object> boardMap = boardList.get(index);
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("resultCode", 200);
         resultMap.put("detail_board", boardMap);
-
         return resultMap;
+        */
+
     }
     @GetMapping("/update")
     public Map<String, Object> update(@RequestParam Map<String, Object> params){
-
+        /*
         int index = Integer.parseInt(params.get("order") + "") - 1;
         Map<String, Object> boardMap = boardList.get(index);
         boardMap.put("title", params.get("title"));
@@ -79,5 +80,11 @@ public class BoardRestController {
         //resultMap.put("detail_board", boardMap);
 
         return resultMap;
+        */
+        return boardService.updateBoard(params);
+    }
+    @GetMapping("/delete")
+    public Map<String, Object> delete(@RequestParam Map<String, Object> params){
+        return boardService.deleteBoard(Integer.parseInt(params.get("id") + ""));
     }
 }

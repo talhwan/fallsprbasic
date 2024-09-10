@@ -8,13 +8,16 @@
 <body>
 detail
 
-<input type="text" id="detail_board_order" readonly/>
+<input type="text" id="detail_board_id" readonly/>
 <input type="text" id="detail_board_title" />
 <input type="text" id="detail_board_content" />
 <input type="text" id="detail_board_author" />
 
 <button onclick="update_board()">
     글 수정
+</button>
+<button onclick="delete_board()">
+    글 삭제
 </button>
 
 <script>
@@ -37,7 +40,7 @@ detail
             type: "GET",
             contentType : 'application/json; charset=utf-8',
             data: {
-                order : final_id
+                id : final_id
             },
             cache: false,
             success: (obj_data, status, xhr)=>{
@@ -54,10 +57,10 @@ detail
                 alert(obj_data["detail_board"]["author"]);
                  */
                 //$("#detail_board_order").val(obj_data.order);
-                $("#detail_board_order").val(obj_data["detail_board"]["order"]);
-                $("#detail_board_title").val(obj_data["detail_board"]["title"]);
-                $("#detail_board_content").val(obj_data["detail_board"]["content"]);
-                $("#detail_board_author").val(obj_data["detail_board"]["author"]);
+                $("#detail_board_id").val(obj_data["id"]);
+                $("#detail_board_title").val(obj_data["title"]);
+                $("#detail_board_content").val(obj_data["content"]);
+                $("#detail_board_author").val(obj_data["author"]);
             },
             error: (obj_data, status, xhr)=>{
                 alert("error!!");
@@ -72,10 +75,28 @@ detail
             type: "GET",
             contentType : 'application/json; charset=utf-8',
             data: {
-                order : final_id
+                id : final_id
                 ,title : $("#detail_board_title").val()
                 ,content : $("#detail_board_content").val()
                 ,author : $("#detail_board_author").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    function delete_board(){
+        $.ajax({
+            url: "/api/board/delete",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                id : final_id
             },
             cache: false,
             success: (obj_data, status, xhr)=>{
