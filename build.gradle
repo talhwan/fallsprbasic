@@ -26,7 +26,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 
-/*
     //여기서부터 추가 시작
     //domain
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -34,6 +33,7 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.0' //db
 
+    /*
     //mybatis 사용
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3' //3.0.2 => 3.0.3으로 상승!!
     //swagger 사용!!!

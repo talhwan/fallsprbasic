@@ -11,6 +11,8 @@ create
 <div id="div_id" class="div_abcde">
     글 입력 테스트
 </div>
+순번
+<input type="number" id="create_board_id" />
 제목
 <input type="text" id="create_board_title" />
 내용
@@ -37,7 +39,8 @@ create
             type: "GET",
             contentType : 'application/json; charset=utf-8',
             data: {
-                title : $("#create_board_title").val()
+                id : $("#create_board_id").val()
+                , title : $("#create_board_title").val()
                 ,content : $("#create_board_content").val()
                 ,author : $("#create_board_author").val()
             },
