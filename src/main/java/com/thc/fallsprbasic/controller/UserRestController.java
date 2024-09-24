@@ -23,6 +23,13 @@ public class UserRestController {
         this.userService = userService;
     }
 
+    @GetMapping("/login")
+    public Map<String, Object> login(@RequestParam Map<String, Object> params){
+        return userService.login(params);
+    }
+
+    /**/
+
     @GetMapping("/create")
     public Map<String, Object> create(@RequestParam Map<String, Object> params){
         return userService.create(params);
@@ -31,7 +38,7 @@ public class UserRestController {
     public List<User> list(){
         return userService.list();
     }
-    @GetMapping("/detail") //이 안에 있는 주소값은 꼭 유니크해야함!!
+    @GetMapping("/detail")
     public User detail(@RequestParam Integer id){
         return userService.detail(id);
     }

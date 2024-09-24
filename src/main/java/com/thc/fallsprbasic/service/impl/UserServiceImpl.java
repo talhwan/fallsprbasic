@@ -23,6 +23,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Map<String, Object> login(Map<String, Object> params) {
+        Map<String, Object> result = new HashMap<>();
+
+        String username = (String) params.get("username"); //사용자가 프론트에서 던진 아이디
+        String password = (String) params.get("password"); //사용자가 프론트에서 던진 비밀번호
+
+        /*
+        //1번째 방법!!
+        User user = userRepository.findByUsername(username); //사용자가 던진 아이디로 조회한 데이터베이스 담긴 진짜 사용자 정보
+        if(user == null){
+            //아이디도 틀린것 입니다.
+            result.put("resultCode", 400);
+            return result;
+        }
+        //아이디는 정상적인 것 입니다!!
+        String password_real = user.getPassword();
+        if(password_real.equals(password)){
+            //사용자 입력값이랑 진짜 비번이랑 동일!! => 로그인 성공!!
+            result.put("resultCode", 200);
+            return result;
+        } else {
+            result.put("resultCode", 400);
+            return result;
+        }
+         */
+
+        //2번째 방법
+        User user = userRepository.findByUsernameAndPassword(username, password);
+        if(user != null){
+            //로그인 성공!!
+            result.put("resultCode", 200);
+            return result;
+        }
+        return null;
+
+    }
+
+    /**/
+
+    @Override
     public Map<String, Object> create(Map<String, Object> params) {
         System.out.println("create");
         Map<String, Object> result = new HashMap<String, Object>();

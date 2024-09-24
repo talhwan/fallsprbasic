@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+로그인
+
+아이디
+<input type="text" id="create_user_username" />
+비번
+<input type="password" id="create_user_password" />
+
+<button onclick="login_user()">
+    로그인
+</button>
+
+<script>
+    function login_user(){
+        $.ajax({
+            url: "/api/user/login",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                username : $("#create_user_username").val()
+                ,password : $("#create_user_password").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+
+</body>
+</html>
