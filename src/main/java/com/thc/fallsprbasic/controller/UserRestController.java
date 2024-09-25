@@ -32,6 +32,10 @@ public class UserRestController {
     public Map<String, Object> signup(@RequestParam Map<String, Object> params){
         return userService.signup(params);
     }
+    @GetMapping("/id")
+    public boolean id(@RequestParam String username){
+        return userService.id(username);
+    }
 
     /**/
 

@@ -11,6 +11,7 @@ import java.util.Map;
 public interface UserService {
     Map<String, Object> login(Map<String, Object> params);
     Map<String, Object> signup(Map<String, Object> params);
+    boolean id(String username);
     /**/
     Map<String, Object> create(Map<String, Object> params);
     Map<String, Object> update(Map<String, Object> params);

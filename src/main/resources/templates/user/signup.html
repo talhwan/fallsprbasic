@@ -19,10 +19,10 @@
 3. 컨트롤러 id 메소드 생성
 4. 서비스 id 메소드 생성
 -->
-
+<div id="temp_div">현재는 회원가입 안됨. 왜냐면 너 아이디 중복확인 안했음!</div>
 아이디
 <input type="text" id="create_user_username" />
-<button onclick="id_user()">
+<button onclick="id_user()" id="btn_id_user">
     아이디 중복확인
 </button>
 
@@ -33,11 +33,36 @@
 전화번호
 <input type="text" id="create_user_phone" />
 
-<button onclick="signup_user()">
+<button onclick="signup_user()" id="btn_signup_user" disabled>
     회원 가입
 </button>
 
 <script>
+    function id_user(){
+        $.ajax({
+            url: "/api/user/id",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                username : $("#create_user_username").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                //alert(JSON.stringify(obj_data));
+                if(obj_data){
+                    $("#temp_div").text("아이디 잘고름! 회원가입 가능!!");
+                    $("#btn_signup_user").attr("disabled", false);
+                    $("#create_user_username").attr("readOnly", true);
+                    $("#btn_id_user").remove();
+                }
+
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
     function signup_user(){
         $.ajax({
             url: "/api/user/signup",

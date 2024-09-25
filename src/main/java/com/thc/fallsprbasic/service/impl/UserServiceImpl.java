@@ -69,6 +69,15 @@ public class UserServiceImpl implements UserService {
         }
         return create(params);
     }
+    @Override
+    public boolean id(String username) {
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**/
 
