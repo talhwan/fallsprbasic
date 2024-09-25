@@ -59,6 +59,16 @@ public class UserServiceImpl implements UserService {
         return null;
 
     }
+    @Override
+    public Map<String, Object> signup(Map<String, Object> params) {
+
+        String username = (String) params.get("username");
+        String password = (String) params.get("password");
+        if(username == null || "".equals(username) || password == null || "".equals(password)){
+            return null;
+        }
+        return create(params);
+    }
 
     /**/
 

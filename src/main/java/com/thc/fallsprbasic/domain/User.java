@@ -5,19 +5,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    Integer id;
+    @Id Integer id;
 
-    @Column(unique=true, nullable=false)
+    @Setter @Column(unique=true, nullable=false)
     String username;
 
-    @Column(nullable=false)
+    @Setter @Column(nullable=false)
     String password;
 
-    String name;
-    String phone;
+    @Setter String name;
+    @Setter String phone;
 }

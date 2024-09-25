@@ -28,6 +28,11 @@ public class UserRestController {
         return userService.login(params);
     }
 
+    @GetMapping("/signup")
+    public Map<String, Object> signup(@RequestParam Map<String, Object> params){
+        return userService.signup(params);
+    }
+
     /**/
 
     @GetMapping("/create")
