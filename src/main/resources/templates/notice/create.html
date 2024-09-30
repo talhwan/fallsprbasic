@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+create
+
+<div id="div_id" class="div_abcde">
+    공지사항 신규 입력
+</div>
+
+제목
+<input type="text" id="create_notice_title" />
+내용
+<input type="text" id="create_notice_content" />
+
+<button onclick="create_notice()">
+    저장
+</button>
+
+<script>
+    function create_notice(){
+        $.ajax({
+            url: "/api/notice/create",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                title : $("#create_notice_title").val()
+                ,content : $("#create_notice_content").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+
+</body>
+</html>
