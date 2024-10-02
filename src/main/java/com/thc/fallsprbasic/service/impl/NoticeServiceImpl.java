@@ -1,6 +1,7 @@
 package com.thc.fallsprbasic.service.impl;
 
 import com.thc.fallsprbasic.domain.Notice;
+import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.repository.NoticeRepository;
 import com.thc.fallsprbasic.service.NoticeService;
 import org.springframework.stereotype.Service;
@@ -22,31 +23,25 @@ public class NoticeServiceImpl implements NoticeService {
     /**/
 
     @Override
-    public Map<String, Object> create(Map<String, Object> params) {
+    public NoticeDto.CreateResDto create(NoticeDto.CreateReqDto param) {
         System.out.println("create");
-        Map<String, Object> result = new HashMap<String, Object>();
-
-        Notice notice = new Notice();
-        notice.setTitle(params.get("title").toString());
-        notice.setContent(params.get("content").toString());
-        noticeRepository.save(notice);
-
-        result.put("success", true);
-        result.put("id", notice.getId());
-        return result;
+        /*Notice notice = param.toEntity();
+        notice = noticeRepository.save(notice);
+        NoticeDto.CreateResDto resDto = notice.toCreateResDto();
+        return resDto;*/
+        return noticeRepository.save(param.toEntity()).toCreateResDto();
     }
     @Override
-    public Map<String, Object> update(Map<String, Object> params) {
+    public void update(NoticeDto.UpdateReqDto param) {
         System.out.println("update");
-        Notice notice = noticeRepository.findById(Long.parseLong(params.get("id") + "")).orElseThrow(() -> new RuntimeException(""));
-        if(params.get("title") != null) {
-            notice.setTitle(params.get("title").toString());
+        Notice notice = noticeRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
+        if(param.getTitle() != null) {
+            notice.setTitle(param.getTitle());
         }
-        if(params.get("content") != null) {
-            notice.setContent(params.get("content").toString());
+        if(param.getContent() != null) {
+            notice.setContent(param.getContent());
         }
         noticeRepository.save(notice);
-        return null;
     }
     @Override
     public List<Notice> list() {

@@ -58,13 +58,13 @@ detail
     function update_notice(){
         $.ajax({
             url: "/api/notice/update",
-            type: "GET",
+            type: "PUT",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 id : final_id
                 ,title : $("#detail_notice_title").val()
                 ,content : $("#detail_notice_content").val()
-            },
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));

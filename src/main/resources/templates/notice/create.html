@@ -25,12 +25,12 @@ create
     function create_notice(){
         $.ajax({
             url: "/api/notice/create",
-            type: "GET",
+            type: "POST",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 title : $("#create_notice_title").val()
                 ,content : $("#create_notice_content").val()
-            },
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
