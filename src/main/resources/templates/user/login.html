@@ -21,12 +21,12 @@
     function login_user(){
         $.ajax({
             url: "/api/user/login",
-            type: "GET",
+            type: "POST",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 username : $("#create_user_username").val()
                 ,password : $("#create_user_password").val()
-            },
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));

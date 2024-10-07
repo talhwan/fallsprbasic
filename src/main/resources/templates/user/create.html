@@ -29,14 +29,14 @@ create
     function create_user(){
         $.ajax({
             url: "/api/user/create",
-            type: "GET",
+            type: "POST",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 username : $("#create_user_username").val()
                 ,password : $("#create_user_password").val()
                 ,name : $("#create_user_name").val()
                 ,phone : $("#create_user_phone").val()
-            },
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));

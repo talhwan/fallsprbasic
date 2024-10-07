@@ -6,6 +6,7 @@ import com.thc.fallsprbasic.repository.NoticeRepository;
 import com.thc.fallsprbasic.service.NoticeService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,19 +45,37 @@ public class NoticeServiceImpl implements NoticeService {
         noticeRepository.save(notice);
     }
     @Override
-    public List<Notice> list() {
-        List<Notice> noticeList = noticeRepository.findAll();
-        return noticeList;
-    }
-    @Override
-    public Notice detail(Long id) {
-        return noticeRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-    }
-
-    @Override
     public Map<String, Object> delete(Long id) {
         Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
         noticeRepository.delete(notice);
         return null;
     }
+
+    public NoticeDto.DetailResDto entityToDto(Notice notice){
+        //돌려줄 디티오에 정보를 담아보겠습니다. (실제로는 Mapper를 사용할 것이라, 이렇게는 잘 안씀)
+        NoticeDto.DetailResDto res = new NoticeDto.DetailResDto();
+        res.setId(notice.getId());
+        res.setTitle(notice.getTitle());
+        res.setContent(notice.getContent());
+        return res;
+    }
+
+    @Override
+    public NoticeDto.DetailResDto detail(Long id) {
+        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
+        return entityToDto(notice);
+    }
+
+
+    @Override
+    public List<NoticeDto.DetailResDto> list() {
+        List<NoticeDto.DetailResDto> list = new ArrayList<NoticeDto.DetailResDto>();
+        List<Notice> noticeList = noticeRepository.findAll();
+        for(Notice notice : noticeList) {
+            list.add(entityToDto(notice));
+        }
+        return list;
+    }
+
+
 }

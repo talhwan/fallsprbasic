@@ -24,7 +24,7 @@ create
 <script>
     function create_notice(){
         $.ajax({
-            url: "/api/notice/create",
+            url: "/api/notice",
             type: "POST",
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({

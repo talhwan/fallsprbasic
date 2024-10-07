@@ -20,6 +20,5 @@ public class Notice {
         NoticeDto.CreateResDto dto = new NoticeDto.CreateResDto();
         dto.setId(id);
         return dto;
-        //return NoticeDto.CreateResDto.builder().id(id).build();
     }
 }

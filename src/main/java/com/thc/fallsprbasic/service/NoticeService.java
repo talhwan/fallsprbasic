@@ -13,6 +13,6 @@ public interface NoticeService {
     NoticeDto.CreateResDto create(NoticeDto.CreateReqDto param);
     void update(NoticeDto.UpdateReqDto param);
     Map<String, Object> delete(Long id);
-    List<Notice> list();
-    Notice detail(Long id);
+    List<NoticeDto.DetailResDto> list();
+    NoticeDto.DetailResDto detail(Long id);
 }
