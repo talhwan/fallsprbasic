@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+detail
+
+<input type="text" id="detail_faq_id" readonly/>
+<input type="text" id="detail_faq_title" />
+<input type="text" id="detail_faq_content" />
+
+<button onclick="update_faq()">
+    수정
+</button>
+<button onclick="delete_faq()">
+    삭제
+</button>
+
+<script>
+    //url에서 id값 추출해오기!
+    let temp_url = window.location.href;
+    let split_temp_url = temp_url.split('/');
+    let final_id = split_temp_url[split_temp_url.length - 1];
+    let split_q = final_id.split("?");
+    if(split_q.length > 0){
+        final_id = split_q[0];
+    }
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        detail_faq();
+    });
+
+    function detail_faq(){
+        $.ajax({
+            url: "/api/faq/detail",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                id : final_id
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+
+                $("#detail_faq_id").val(obj_data["id"]);
+                $("#detail_faq_title").val(obj_data["title"]);
+                $("#detail_faq_content").val(obj_data["content"]);
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+
+    function update_faq(){
+        $.ajax({
+            url: "/api/faq",
+            type: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+                ,title : $("#detail_faq_title").val()
+                ,content : $("#detail_faq_content").val()
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    function delete_faq(){
+        $.ajax({
+            url: "/api/faq",
+            type: "DELETE",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                id : final_id
+            }),
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                alert(JSON.stringify(obj_data));
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>
