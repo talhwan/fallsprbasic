@@ -11,6 +11,7 @@ detail
 <input type="text" id="detail_faq_id" readonly/>
 <input type="text" id="detail_faq_title" />
 <input type="text" id="detail_faq_content" />
+<input type="text" id="detail_faq_username" readonly/>
 
 <button onclick="update_faq()">
     수정
@@ -47,6 +48,7 @@ detail
                 $("#detail_faq_id").val(obj_data["id"]);
                 $("#detail_faq_title").val(obj_data["title"]);
                 $("#detail_faq_content").val(obj_data["content"]);
+                $("#detail_faq_username").val(obj_data["userUsername"]);
             },
             error: (obj_data, status, xhr)=>{
                 alert("error!!");

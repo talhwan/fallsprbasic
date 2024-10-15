@@ -33,7 +33,7 @@ list
                 //alert(JSON.stringify(obj_data));
                 for(let each of obj_data){
                     $("#div_list").append(
-                        "<a href='/faq/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["title"] + "<br/>"
+                        "<a href='/faq/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["title"] + "//" +each["userUsername"] +"<br/>"
                     );
                 }
             },

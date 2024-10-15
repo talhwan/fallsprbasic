@@ -30,6 +30,7 @@ create
             data: JSON.stringify({
                 title : $("#create_faq_title").val()
                 ,content : $("#create_faq_content").val()
+                ,userId : localStorage.getItem("userId")
             }),
             cache: false,
             success: (obj_data, status, xhr)=>{

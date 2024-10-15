@@ -12,6 +12,9 @@ public class Faq {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id Long id;
 
+    @Setter
+    Long userId;
+
     @Setter @Column(nullable=false)
     String title;
     @Setter
@@ -19,13 +22,14 @@ public class Faq {
 
     //생성자는 그냥 안쓰고 싶습니다! of 라는 메서드를 통해서만, 엔티티 인스턴스를 만들고 싶습니다!
     protected Faq(){}
-    private Faq(String title, String content){
+    private Faq(Long userId, String title, String content){
+        this.userId = userId;
         this.title = title;
         this.content = content;
     }
 
-    public static Faq of(String title, String content){
-        return new Faq(title, content);
+    public static Faq of(Long userId, String title, String content){
+        return new Faq(userId, title, content);
     }
 
     public FaqDto.CreateResDto toCreateResDto() {

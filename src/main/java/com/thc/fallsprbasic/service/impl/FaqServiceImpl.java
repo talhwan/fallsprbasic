@@ -2,9 +2,11 @@ package com.thc.fallsprbasic.service.impl;
 
 import com.thc.fallsprbasic.domain.Faq;
 import com.thc.fallsprbasic.domain.Notice;
+import com.thc.fallsprbasic.domain.User;
 import com.thc.fallsprbasic.dto.FaqDto;
 import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.repository.FaqRepository;
+import com.thc.fallsprbasic.repository.UserRepository;
 import com.thc.fallsprbasic.service.FaqService;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,13 @@ import java.util.Map;
 public class FaqServiceImpl implements FaqService {
 
     private final FaqRepository faqRepository;
+    private final UserRepository userRepository;
     public FaqServiceImpl(
             FaqRepository faqRepository
+            , UserRepository userRepository
     ) {
         this.faqRepository = faqRepository;
+        this.userRepository = userRepository;
     }
 
     /**/
@@ -53,6 +58,16 @@ public class FaqServiceImpl implements FaqService {
         res.setId(faq.getId());
         res.setTitle(faq.getTitle());
         res.setContent(faq.getContent());
+        //사용자 id 값을 가져올수 있다니!!!
+        Long userId = faq.getUserId();
+        res.setUserId(userId);
+        try{
+            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(""));
+            res.setUserUsername(user.getUsername());
+        } catch(Exception e){
+        }
+
+
         return res;
     }
 

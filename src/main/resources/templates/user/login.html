@@ -29,7 +29,9 @@
             }),
             cache: false,
             success: (obj_data, status, xhr)=>{
-                alert(JSON.stringify(obj_data));
+                //alert(JSON.stringify(obj_data));
+                localStorage.setItem("userId", obj_data["id"]);
+                alert(localStorage.getItem("userId"));
             },
             error: (obj_data, status, xhr)=>{
                 alert("error!!");
