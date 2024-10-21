@@ -3,13 +3,55 @@
 <mapper namespace="com.thc.fallsprbasic.mapper.FaqMapper">
 
 	<!---->
-	<select id="detail" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.FaqDto$DetailResDto">
+
+	<!--
+	/*
+		1)
 		SELECT faq.id
 		, faq.title
 		, faq.content
 		, faq.user_id as userId
-		FROM faq
+		, user.username as userUsername
+		FROM faq, user
 		WHERE faq.id = #{id}
+		  AND faq.user_id = user.id
+
+		2)
+		SELECT faq.id
+			 , faq.title
+			 , faq.content
+			 , faq.user_id as userId
+			, user.username as userUsername
+		FROM faq
+		LEFT JOIN user
+		  ON faq.user_id = user.id
+		WHERE faq.id = #{id}
+		*/
+	-->
+	<select id="detail" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.FaqDto$DetailResDto">
+		SELECT faq.id
+			 , faq.title
+			 , faq.content
+			 , faq.user_id as userId
+			, user.username as userUsername
+		FROM faq
+		LEFT JOIN user
+		  ON faq.user_id = user.id
+		WHERE faq.id = #{id}
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.FaqDto$DetailResDto">
+		SELECT faq.id
+			 , faq.title
+			 , faq.content
+			 , faq.user_id as userId
+			, user.username as userUsername
+		FROM faq
+		LEFT JOIN user
+		  ON faq.user_id = user.id
+		WHERE faq.id is not NULL
+		<!--<if test = "title != null and title !=''">AND faq.title LIKE CONCAT('%', #{title}, '%')</if>-->
+		<if test = "title != null and title !=''">AND faq.title = #{title}</if>
+
 	</select>
 
 </mapper>

@@ -41,7 +41,7 @@ public class FaqRestController {
         return ResponseEntity.ok(faqService.detail(id));
     }
     @GetMapping("/list")
-    public ResponseEntity<List<FaqDto.DetailResDto>> list(){
-        return ResponseEntity.ok(faqService.list());
+    public ResponseEntity<List<FaqDto.DetailResDto>> list(FaqDto.ListReqDto param){
+        return ResponseEntity.ok(faqService.list(param));
     }
 }

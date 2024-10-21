@@ -55,6 +55,7 @@ public class FaqServiceImpl implements FaqService {
         Faq faq = faqRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
         faqRepository.delete(faq);
     }
+/*
 
     public FaqDto.DetailResDto entityToDto(Faq faq){
         //돌려줄 디티오에 정보를 담아보겠습니다. (실제로는 Mapper를 사용할 것이라, 이렇게는 잘 안씀)
@@ -72,6 +73,7 @@ public class FaqServiceImpl implements FaqService {
         }
         return res;
     }
+*/
 
     @Override
     public FaqDto.DetailResDto detail(Long id) {
@@ -82,13 +84,14 @@ public class FaqServiceImpl implements FaqService {
         */
     }
     @Override
-    public List<FaqDto.DetailResDto> list() {
-        List<FaqDto.DetailResDto> list = new ArrayList<FaqDto.DetailResDto>();
+    public List<FaqDto.DetailResDto> list(FaqDto.ListReqDto param) {
+        return faqMapper.list(param);
+        /*List<FaqDto.DetailResDto> list = new ArrayList<FaqDto.DetailResDto>();
         List<Faq> faqList = faqRepository.findAll();
         for(Faq faq : faqList) {
-            list.add(entityToDto(faq));
+            //list.add(entityToDto(faq));
         }
-        return list;
+        return list;*/
     }
 
 
