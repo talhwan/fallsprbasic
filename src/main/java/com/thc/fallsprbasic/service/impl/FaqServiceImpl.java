@@ -5,6 +5,7 @@ import com.thc.fallsprbasic.domain.Notice;
 import com.thc.fallsprbasic.domain.User;
 import com.thc.fallsprbasic.dto.FaqDto;
 import com.thc.fallsprbasic.dto.NoticeDto;
+import com.thc.fallsprbasic.mapper.FaqMapper;
 import com.thc.fallsprbasic.repository.FaqRepository;
 import com.thc.fallsprbasic.repository.UserRepository;
 import com.thc.fallsprbasic.service.FaqService;
@@ -18,12 +19,15 @@ import java.util.Map;
 public class FaqServiceImpl implements FaqService {
 
     private final FaqRepository faqRepository;
+    private final FaqMapper faqMapper;
     private final UserRepository userRepository;
     public FaqServiceImpl(
             FaqRepository faqRepository
+            , FaqMapper faqMapper
             , UserRepository userRepository
     ) {
         this.faqRepository = faqRepository;
+        this.faqMapper = faqMapper;
         this.userRepository = userRepository;
     }
 
@@ -66,15 +70,16 @@ public class FaqServiceImpl implements FaqService {
             res.setUserUsername(user.getUsername());
         } catch(Exception e){
         }
-
-
         return res;
     }
 
     @Override
     public FaqDto.DetailResDto detail(Long id) {
+        return faqMapper.detail(id);
+        /*
         Faq faq = faqRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
         return entityToDto(faq);
+        */
     }
     @Override
     public List<FaqDto.DetailResDto> list() {
