@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.fallsprbasic.mapper.NoticeMapper">
+	<select id="detail" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
+		SELECT notice.id
+			 , notice.title
+			 , notice.content
+		FROM notice
+		WHERE notice.id = #{id}
+	</select>
+
+	<select id="list" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
+		SELECT notice.id
+			 , notice.title
+			 , notice.content
+		FROM notice
+		WHERE notice.id is not NULL
+		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
+	</select>
+
+</mapper>

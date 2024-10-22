@@ -85,13 +85,12 @@ public class FaqServiceImpl implements FaqService {
     }
     @Override
     public List<FaqDto.DetailResDto> list(FaqDto.ListReqDto param) {
-        return faqMapper.list(param);
-        /*List<FaqDto.DetailResDto> list = new ArrayList<FaqDto.DetailResDto>();
-        List<Faq> faqList = faqRepository.findAll();
-        for(Faq faq : faqList) {
-            //list.add(entityToDto(faq));
+        List<FaqDto.DetailResDto> list = faqMapper.list(param);
+        List<FaqDto.DetailResDto> newList = new ArrayList<>();
+        for(FaqDto.DetailResDto each : list) {
+            newList.add(detail(each.getId()));
         }
-        return list;*/
+        return newList;
     }
 
 

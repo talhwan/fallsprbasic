@@ -1,7 +1,6 @@
 package com.thc.fallsprbasic.mapper;
 
 import com.thc.fallsprbasic.dto.FaqDto;
-
 import java.util.List;
 
 public interface FaqMapper {

@@ -41,13 +41,7 @@
 	</select>
 	<select id="list" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.FaqDto$DetailResDto">
 		SELECT faq.id
-			 , faq.title
-			 , faq.content
-			 , faq.user_id as userId
-			, user.username as userUsername
 		FROM faq
-		LEFT JOIN user
-		  ON faq.user_id = user.id
 		WHERE faq.id is not NULL
 		<!--<if test = "title != null and title !=''">AND faq.title LIKE CONCAT('%', #{title}, '%')</if>-->
 		<if test = "title != null and title !=''">AND faq.title = #{title}</if>

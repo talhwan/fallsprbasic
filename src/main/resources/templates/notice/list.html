@@ -7,7 +7,7 @@
 </head>
 <body>
 list
-
+검색어 : <input id="search_notice_title" />
 <div id="div_list">
 </div>
 
@@ -21,7 +21,9 @@ list
             url: "/api/notice/list",
             type: "GET",
             contentType : 'application/json; charset=utf-8',
-            data: {},
+            data: {
+                title : $("#search_notice_title").val()
+            },
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
