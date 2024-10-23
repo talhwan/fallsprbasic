@@ -1,15 +1,11 @@
 package com.thc.fallsprbasic.controller;
 
-import com.thc.fallsprbasic.domain.Notice;
-import com.thc.fallsprbasic.domain.User;
+import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.service.NoticeService;
-import com.thc.fallsprbasic.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/api/notice")
 @RestController
@@ -25,7 +21,7 @@ public class NoticeRestController {
     /**/
 
     @PostMapping("")
-    public NoticeDto.CreateResDto create(@RequestBody NoticeDto.CreateReqDto param){
+    public DefaultDto.CreateResDto create(@RequestBody NoticeDto.CreateReqDto param){
         return noticeService.create(param);
     }
     @PutMapping("")
@@ -44,5 +40,9 @@ public class NoticeRestController {
     @GetMapping("/list")
     public List<NoticeDto.DetailResDto> list(NoticeDto.ListReqDto param){
         return noticeService.list(param);
+    }
+    @GetMapping("/pagedList")
+    public NoticeDto.PagedListResDto pagedList(NoticeDto.PagedListReqDto param){
+        return noticeService.pagedList(param);
     }
 }

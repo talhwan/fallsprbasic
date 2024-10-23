@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+paged list
+요청페이지 : <input type="number" id="search_callpage" value="1" />
+검색어 : <input id="search_notice_title" />
+<div id="div_list">
+</div>
+
+<button onclick="pList()">
+    공지사항 전체 목록
+</button>
+
+<script>
+    function pList(){
+        $.ajax({
+            url: "/api/notice/pagedList",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                title : $("#search_notice_title").val()
+                , perpage : 5
+                , callpage : $("#search_callpage").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                $("#div_list").html("");
+                let tempList = obj_data["list"];
+                //alert(JSON.stringify(obj_data));
+                for(let each of tempList){
+                    $("#div_list").append(
+                        "<a href='/notice/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["title"] + "<br/>"
+                    );
+                }
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+</body>
+</html>

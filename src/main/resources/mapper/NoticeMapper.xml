@@ -3,6 +3,10 @@
 <mapper namespace="com.thc.fallsprbasic.mapper.NoticeMapper">
 	<select id="detail" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
 		SELECT notice.id
+		     , notice.deleted
+		     , notice.created_at as createdAt
+			 ,SUBSTRING(notice.created_at, 1, 19) as createdAtDateTime
+		     , notice.modified_at as modifiedAt
 			 , notice.title
 			 , notice.content
 		FROM notice
@@ -11,11 +15,39 @@
 
 	<select id="list" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
 		SELECT notice.id
-			 , notice.title
-			 , notice.content
+			, notice.deleted
+			, notice.created_at as createdAt
+			, notice.modified_at as modifiedAt
+			, notice.title
+			, notice.content
 		FROM notice
 		WHERE notice.id is not NULL
 		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
+		ORDER BY notice.created_at DESC
 	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
+		SELECT notice.id
+			, notice.deleted
+			, notice.created_at as createdAt
+			, notice.modified_at as modifiedAt
+			, notice.title
+			, notice.content
+		FROM notice
+		WHERE notice.id is not NULL
+		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
+		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		ORDER BY notice.created_at DESC
+		LIMIT #{offset}, #{perpage}
+	</select>
+
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(notice.id) as listsize
+		FROM notice
+		WHERE notice.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
+	</select>
+
 
 </mapper>

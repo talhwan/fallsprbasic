@@ -43,7 +43,7 @@ detail
             },
             cache: false,
             success: (obj_data, status, xhr)=>{
-
+                alert(JSON.stringify(obj_data));
                 $("#detail_notice_id").val(obj_data["id"]);
                 $("#detail_notice_title").val(obj_data["title"]);
                 $("#detail_notice_content").val(obj_data["content"]);
