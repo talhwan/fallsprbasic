@@ -3,6 +3,7 @@ package com.thc.fallsprbasic.service.impl;
 import com.thc.fallsprbasic.domain.Faq;
 import com.thc.fallsprbasic.domain.Notice;
 import com.thc.fallsprbasic.domain.User;
+import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.FaqDto;
 import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.mapper.FaqMapper;
@@ -34,7 +35,7 @@ public class FaqServiceImpl implements FaqService {
     /**/
 
     @Override
-    public FaqDto.CreateResDto create(FaqDto.CreateReqDto param) {
+    public DefaultDto.CreateResDto create(FaqDto.CreateReqDto param) {
         System.out.println("create");
         return faqRepository.save(param.toEntity()).toCreateResDto();
     }
@@ -55,42 +56,32 @@ public class FaqServiceImpl implements FaqService {
         Faq faq = faqRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
         faqRepository.delete(faq);
     }
-/*
 
-    public FaqDto.DetailResDto entityToDto(Faq faq){
-        //돌려줄 디티오에 정보를 담아보겠습니다. (실제로는 Mapper를 사용할 것이라, 이렇게는 잘 안씀)
-        FaqDto.DetailResDto res = new FaqDto.DetailResDto();
-        res.setId(faq.getId());
-        res.setTitle(faq.getTitle());
-        res.setContent(faq.getContent());
-        //사용자 id 값을 가져올수 있다니!!!
-        Long userId = faq.getUserId();
-        res.setUserId(userId);
-        try{
-            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(""));
-            res.setUserUsername(user.getUsername());
-        } catch(Exception e){
-        }
-        return res;
+    public FaqDto.DetailResDto get(Long id) {
+        return faqMapper.detail(id);
     }
-*/
-
+    public List<FaqDto.DetailResDto> detailList(List<FaqDto.DetailResDto> list) {
+        List<FaqDto.DetailResDto> newList = new ArrayList<>();
+        for(FaqDto.DetailResDto each : list) {
+            newList.add(get(each.getId()));
+        }
+        return newList;
+    }
     @Override
     public FaqDto.DetailResDto detail(Long id) {
-        return faqMapper.detail(id);
-        /*
-        Faq faq = faqRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-        return entityToDto(faq);
-        */
+        return get(id);
     }
     @Override
     public List<FaqDto.DetailResDto> list(FaqDto.ListReqDto param) {
-        List<FaqDto.DetailResDto> list = faqMapper.list(param);
-        List<FaqDto.DetailResDto> newList = new ArrayList<>();
-        for(FaqDto.DetailResDto each : list) {
-            newList.add(detail(each.getId()));
-        }
-        return newList;
+        return detailList(faqMapper.list(param));
+    }
+
+    @Override
+    public DefaultDto.PagedListResDto pagedList(FaqDto.PagedListReqDto param){
+        int countList = faqMapper.pagedListCount(param);
+
+
+        return null;
     }
 
 

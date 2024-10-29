@@ -43,9 +43,28 @@
 		SELECT faq.id
 		FROM faq
 		WHERE faq.id is not NULL
-		<!--<if test = "title != null and title !=''">AND faq.title LIKE CONCAT('%', #{title}, '%')</if>-->
-		<if test = "title != null and title !=''">AND faq.title = #{title}</if>
+		<if test = "deleted != null and deleted !=''">AND faq.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND faq.title LIKE CONCAT('%', #{title}, '%')</if>
+	</select>
 
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.FaqDto$DetailResDto">
+		SELECT faq.id
+		FROM faq
+		WHERE faq.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND faq.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND faq.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "orderby != null and orderby =='createdAt'">ORDER BY faq.created_at</if>
+		<if test = "orderby != null and orderby =='title'">ORDER BY faq.title</if>
+		<if test = "orderway != null and orderway =='desc'">DESC</if>
+		<if test = "orderway != null and orderway =='asc'">ASC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(faq.id) as listsize
+		FROM faq
+		WHERE faq.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND faq.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND faq.title LIKE CONCAT('%', #{title}, '%')</if>
 	</select>
 
 </mapper>

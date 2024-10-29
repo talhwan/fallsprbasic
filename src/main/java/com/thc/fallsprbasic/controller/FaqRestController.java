@@ -1,5 +1,6 @@
 package com.thc.fallsprbasic.controller;
 
+import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.FaqDto;
 import com.thc.fallsprbasic.service.FaqService;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class FaqRestController {
 
     /**/
     @PostMapping("")
-    public ResponseEntity<FaqDto.CreateResDto> create(@RequestBody FaqDto.CreateReqDto param){
+    public ResponseEntity<DefaultDto.CreateResDto> create(@RequestBody FaqDto.CreateReqDto param){
         return ResponseEntity.ok(faqService.create(param));
     }
     @PutMapping("")

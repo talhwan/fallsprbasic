@@ -22,7 +22,8 @@
 			, notice.content
 		FROM notice
 		WHERE notice.id is not NULL
-		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
+		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
 		ORDER BY notice.created_at DESC
 	</select>
 
@@ -35,8 +36,8 @@
 			, notice.content
 		FROM notice
 		WHERE notice.id is not NULL
-		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
 		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
 		ORDER BY notice.created_at DESC
 		LIMIT #{offset}, #{perpage}
 	</select>
@@ -46,7 +47,7 @@
 		FROM notice
 		WHERE notice.id is not NULL
 		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
-		<if test = "title != null and title !=''">AND notice.title = #{title}</if>
+		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
 	</select>
 
 

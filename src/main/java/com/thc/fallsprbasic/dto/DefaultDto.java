@@ -57,4 +57,21 @@ public class DefaultDto {
         private Boolean deleted;
     }
 
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class PagedListReqDto {
+        private int callpage; // 요청 페이지
+        private String orderby; //정렬 기준
+        private String orderway; //정렬 방향
+
+        private Integer perpage; //한페이지에 몇개 보여줄지
+        private Integer offset; //몇번째 정보부터 보여줄지
+    }
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class PagedListResDto {
+        private int countList;
+        private int countPage;
+        private int callpage;
+        private Object list;
+    }
+
 }

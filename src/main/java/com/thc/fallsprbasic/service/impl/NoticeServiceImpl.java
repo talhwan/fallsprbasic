@@ -72,6 +72,10 @@ public class NoticeServiceImpl implements NoticeService {
         int countList = noticeMapper.pagedListCount(param);
         //요청 페이지 예) 3페이지
         int callpage = param.getCallpage();
+        //요청 페이지가 1보다 작을때 1로 변환
+        if(callpage < 1) { callpage = 1; }
+
+
         //한번에 볼 페이지수 예) 5개씩
         int perpage = param.getPerpage();
         int offset = (callpage - 1) * perpage;
@@ -81,6 +85,8 @@ public class NoticeServiceImpl implements NoticeService {
         if(countList % perpage > 0){
             countPage++;
         }
+        //요청 페이지가 총 페이지수보다 클때 총 페이지수로 변환
+        if(callpage > countPage) { callpage = countPage; }
 
         param.setOffset(offset);
         List<NoticeDto.DetailResDto> list = noticeMapper.pagedList(param);

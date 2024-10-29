@@ -59,7 +59,7 @@ public class NoticeDto {
         private Boolean deleted;
         private String title;
         private int callpage;
-        private int nowpage;
+        //private int nowpage;
 
         private Integer perpage; //한페이지에 몇개 보여줄지
         private Integer offset; //몇번째 정보부터 보여줄지
