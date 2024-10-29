@@ -75,7 +75,10 @@ public class DefaultDto {
 
         public static PagedListResDto init(PagedListReqDto param, int itemcount){
             //offset 을 구하기 위함!!
-            int perpage = param.getPerpage();
+            Integer perpage = param.getPerpage();
+            if(perpage == null){
+                perpage = 10;
+            }
             int pagecount = itemcount / perpage;
             if(itemcount % perpage > 0){
                 pagecount++;
