@@ -39,7 +39,10 @@ public class FaqDto {
 
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
     public static class PagedListReqDto extends DefaultDto.PagedListReqDto {
-        private Boolean deleted;
+        private String title;
+    }
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class ScrollListReqDto extends DefaultDto.ScrollListReqDto {
         private String title;
     }
 

@@ -65,6 +65,8 @@ public class DefaultDto {
 
         private Integer perpage; //한페이지에 몇개 보여줄지
         private Integer offset; //몇번째 정보부터 보여줄지
+
+        private Boolean deleted;
     }
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
     public static class PagedListResDto {
@@ -77,8 +79,13 @@ public class DefaultDto {
             //offset 을 구하기 위함!!
             Integer perpage = param.getPerpage();
             if(perpage == null){
-                perpage = 10;
+                param.setPerpage(10);
+            } else {
+                if(perpage < 0){
+                    param.setPerpage(10);
+                }
             }
+
             int pagecount = itemcount / perpage;
             if(itemcount % perpage > 0){
                 pagecount++;
@@ -111,4 +118,34 @@ public class DefaultDto {
         }
     }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @SuperBuilder
+    @Setter
+    @Getter
+    public static class ScrollListReqDto {
+        private String orderway; //정렬 방향
+        private Integer perpage; //한페이지에 몇개 보여줄지
+        private Long cursor; // 기준이 되는 정보를 가지고 있는 id 값
+        private String createdAt;// 시간값을 정해주려고 합니다!
+
+        private Boolean deleted;
+
+        public void init(){
+            Integer perpage = getPerpage();
+            if(perpage == null){
+                setPerpage(10);
+            } else {
+                if(perpage < 0){
+                    setPerpage(10);
+                }
+            }
+            //정렬 방향
+            String orderway = getOrderway();
+            if(orderway == null || orderway.isEmpty()){
+                orderway = "desc";
+            }
+            setOrderway(orderway);
+        }
+    }
 }

@@ -82,5 +82,15 @@ public class FaqServiceImpl implements FaqService {
         retrunVal.setList(detailList(faqMapper.pagedList(param)));
         return retrunVal;
     }
+    @Override
+    public List<FaqDto.DetailResDto> scrollList(FaqDto.ScrollListReqDto param){
+        param.init();
+        Long cursor = param.getCursor();
+        if(cursor != null){
+            Faq faq = faqRepository.findById(cursor).orElseThrow(() -> new RuntimeException(""));
+            param.setCreatedAt(faq.getCreatedAt() + "");
+        }
+        return detailList(faqMapper.scrollList(param));
+    }
 
 }
