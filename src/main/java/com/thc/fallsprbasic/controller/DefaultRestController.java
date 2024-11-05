@@ -1,58 +1,50 @@
 package com.thc.fallsprbasic.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 @RequestMapping("/api")
 @RestController
 public class DefaultRestController {
-    @GetMapping("/mapTest") //이 안에 있는 주소값은 꼭 유니크해야함!!
-    public Map<String, Object> mapTest(){
-        Map<String, Object> a_map = new HashMap<String, Object>();
-        a_map.put("hint", "praggre");
-        a_map.put("hint1", "t");
-        System.out.println(a_map);
-        Object value = a_map.get("hint");
-        Object value2 = a_map.get("hint3");
-        System.out.println(value);
-        a_map.remove("hint");
-        System.out.println(a_map);
-        return a_map;
-    }
-    @GetMapping("/listTest") //이 안에 있는 주소값은 꼭 유니크해야함!!
-    public List<String> listTest(@RequestParam int item1, @RequestParam int item2){
-        System.out.println("item1 : " + item1);
-        System.out.println("item2 : " + item2);
+    @PostMapping("/upload")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
+        String filename = file.getOriginalFilename();
+        System.out.println(filename);
+        //위까지는 파일을 프론트에서 잘 전달해줌!!
 
-        int sum = item1 + item2;
+        //이제 가져온 파일을 어딘가에 저장해줘야 함!
+        //"Users/workspace/~~~"; //맥에서는 이런 식으로 하는 것 같음
+        String filePath = "C:/workspace/uploadfiles/fallsprbasic/";
+        File newfile = new File(filePath);
+        // File 객체에 담긴 폴더가 존재하는지 물어봄!
+        if(!newfile.exists()) {
+            // File 객체에 담긴 폴더가 존재안하면 강제 생성!!
+            newfile.mkdirs();
+        }
 
-        List<String> a_list = new ArrayList();
-        a_list.add("sum : " + sum);
-        /*a_list.add("11");
-        a_list.add("22");
-        a_list.add("33");
-        a_list.add("44");*/
-        int a_size = a_list.size();
-        System.out.println(a_list.get(0));
-        return a_list;
-    }
-    @GetMapping("/paramTest") //이 안에 있는 주소값은 꼭 유니크해야함!!
-    public Map<String, Object> paramTest(@RequestParam Map<String, Object> map){
-        System.out.println("item1 : " + map.get("item1"));
-        System.out.println("item2 : " + map.get("item2"));
+        //파일명 중복을 막기 위해 현재 시각 가져오기!
+        Date date = new Date();
+        String temp_date = date.getTime() + "";
+        String finalName = filePath + temp_date + "_" + filename;
+        FileCopyUtils.copy(file.getBytes(), new File(finalName));
 
-        //int sum = Integer.parseInt(map.get("item1") + "") + Integer.parseInt(map.get("item2") + "");
-
-        Map<String, Object> map_result = new HashMap<String, Object>();
-        map_result.put("item1", map.get("item1"));
-        map_result.put("item2", map.get("item2"));
-        return map_result;
+        return ResponseEntity.status(HttpStatus.OK).body(temp_date + "_" + filename);
     }
 }
