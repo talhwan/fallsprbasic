@@ -7,27 +7,37 @@
 </head>
 <body>
 list
-
+검색어 이름 : <input id="search_user_name" />
+검색어 전화번호: <input id="search_user_phone" />
 <div id="div_list">
 </div>
 
 <button onclick="list()">
     사용자 전체 목록
 </button>
-
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        list();
+    });
+</script>
 <script>
     function list(){
         $.ajax({
             url: "/api/user/list",
             type: "GET",
             contentType : 'application/json; charset=utf-8',
-            data: {},
+            data: {
+                name : $("#search_user_name").val()
+                , phone : $("#search_user_phone").val()
+            },
             cache: false,
             success: (obj_data, status, xhr)=>{
-                alert(JSON.stringify(obj_data));
+                $("#div_list").html("");
+                //alert(JSON.stringify(obj_data));
                 for(let each of obj_data){
                     $("#div_list").append(
-                        "<a href='/user/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["username"] + "<br/>"
+                        "<a href='/user/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["username"] + "//" +each["name"] +"<br/>"
                     );
                 }
             },
@@ -40,7 +50,6 @@ list
     /*
     */
 </script>
-
 
 </body>
 </html>

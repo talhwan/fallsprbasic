@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+paged list
+요청페이지 : <input type="number" id="search_callpage" value="1" onchange="pList()"/>
+한번에 볼 페이지 수: <input type="number" id="search_perpage" value="3" onchange="pList()"/>
+정렬기준 :
+<select id="search_orderby" onchange="pList()">
+    <option value="created_at">시간순</option>
+    <option value="title">제목순</option>
+</select>
+정렬방향 :
+<select id="search_orderway" onchange="pList()">
+    <option value="desc">역순</option>
+    <option value="asc">정순</option>
+</select>
+<br/>
+<br/>
+전체 게시글 수 : <input type="number" id="info_total_itemcount" readonly="readonly"/>
+전체 페이지 수 : <input type="number" id="info_total_pagecount" readonly="readonly"/>
+<br/>
+<br/>
+
+
+검색어 이름: <input id="search_user_name" onchange="pList()"/>
+검색어 전화번호: <input id="search_user_phone" onchange="pList()"/>
+<div id="div_list">
+</div>
+<br/>
+<br/>
+페이지 호출
+<div id="div_page_number">
+</div>
+
+<!--<button onclick="pList()">
+    공지사항 전체 목록
+</button>-->
+
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        pList();
+    });
+    function listener_callpage(obj_num){
+        $("#search_callpage").val(obj_num);
+        pList();
+    }
+    function pList(){
+        $.ajax({
+            url: "/api/user/plist",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                name : $("#search_user_name").val()
+                , phone : $("#search_user_phone").val()
+                , perpage : $("#search_perpage").val()
+                , callpage : $("#search_callpage").val()
+                , orderby : $("#search_orderby").val()
+                , orderway : $("#search_orderway").val()
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                $("#div_list").html("");
+                $("#div_page_number").html("");
+                let tempList = obj_data["list"];
+                //alert(JSON.stringify(obj_data));
+                for(let each of tempList){
+                    $("#div_list").append(
+                        "<a href='/user/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["username"] + "//" + each["createdAt"] + "<br/>"
+                    );
+                }
+                $("#info_total_itemcount").val(obj_data["itemcount"]);
+                $("#info_total_pagecount").val(obj_data["pagecount"]);
+                $("#search_callpage").val(obj_data["callpage"]);
+
+
+                let callpage = obj_data["callpage"];
+                //가장 앞 페이지로 긴급 이동
+                $("#div_page_number").append(
+                    "<a href='javascript:listener_callpage(1)'>&lt;&lt;</a> &nbsp; &nbsp;"
+                );
+                //현재 페이지 보다 앞페이지로 이동 하는 부분
+                for(let i=0;i<3;i++){
+                    let tempPage = callpage - 3 + i;
+                    if(tempPage > 0){
+                        $("#div_page_number").append(
+                            "<a href='javascript:listener_callpage("+tempPage+")'>"+tempPage+"</a> &nbsp; &nbsp;"
+                        );
+                    }
+                }
+
+                $("#div_page_number").append(
+                    "<a href='javascript:listener_callpage("+callpage+")'>"+callpage+"</a> &nbsp; &nbsp;"
+                );
+
+                //현재 페이지 보다 뒤페이지로 이동 하는 부분
+                for(let i=0;i<3;i++){
+                    let tempPage = callpage + 1 + i;
+                    if(tempPage <= obj_data["pagecount"]){
+                        $("#div_page_number").append(
+                            "<a href='javascript:listener_callpage("+tempPage+")'>"+tempPage+"</a> &nbsp; &nbsp;"
+                        );
+                    }
+                }
+
+                $("#div_page_number").append(
+                    "<a href='javascript:listener_callpage("+obj_data["pagecount"]+")'>&gt;&gt;</a> &nbsp; &nbsp;"
+                );
+
+                /*
+                << 12 13 14 15 '16' 17 18 19 20 >>
+                * */
+
+
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+</body>
+</html>

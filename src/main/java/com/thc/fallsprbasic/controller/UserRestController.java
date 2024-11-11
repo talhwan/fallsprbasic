@@ -1,14 +1,11 @@
 package com.thc.fallsprbasic.controller;
 
-import com.thc.fallsprbasic.domain.Board;
-import com.thc.fallsprbasic.domain.User;
+import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.UserDto;
-import com.thc.fallsprbasic.service.BoardService;
 import com.thc.fallsprbasic.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/api/user")
 @RestController
@@ -22,39 +19,40 @@ public class UserRestController {
     }
 
     @PostMapping("/login")
-    public UserDto.LoginResDto login(@RequestBody UserDto.LoginReqDto param){
-        return userService.login(param);
-    }
-
-    @PostMapping("/signup")
-    public UserDto.CreateResDto signup(@RequestBody UserDto.CreateReqDto param){
-        return userService.signup(param);
-    }
-    @GetMapping("/id")
-    public boolean id(@RequestParam String username){
-        return userService.id(username);
+    public ResponseEntity<DefaultDto.CreateResDto> login(@RequestBody UserDto.LoginReqDto param){
+        return ResponseEntity.ok(userService.login(param));
     }
 
     /**/
+    @PostMapping("")
+    public ResponseEntity<DefaultDto.CreateResDto> create(@RequestBody UserDto.CreateReqDto param){
+        return ResponseEntity.ok(userService.create(param));
+    }
+    @PutMapping("")
+    public ResponseEntity<String> update(@RequestBody UserDto.UpdateReqDto param){
+        userService.update(param);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("")
+    public ResponseEntity<String> delete(@RequestBody UserDto.UpdateReqDto param){
+        userService.delete(param.getId());
+        return ResponseEntity.ok().build();
+    }
 
-    @PostMapping("/create")
-    public UserDto.CreateResDto create(@RequestBody UserDto.CreateReqDto param){
-        return userService.create(param);
+    @GetMapping("/detail")
+    public ResponseEntity<UserDto.DetailResDto> detail(@RequestParam Long id){
+        return ResponseEntity.ok(userService.detail(id));
     }
     @GetMapping("/list")
-    public List<User> list(){
-        return userService.list();
+    public ResponseEntity<List<UserDto.DetailResDto>> list(UserDto.ListReqDto param){
+        return ResponseEntity.ok(userService.list(param));
     }
-    @GetMapping("/detail")
-    public User detail(@RequestParam Long id){
-        return userService.detail(id);
+    @GetMapping("/plist")
+    public ResponseEntity<DefaultDto.PagedListResDto> plist(UserDto.PagedListReqDto param){
+        return ResponseEntity.ok(userService.pagedList(param));
     }
-    @GetMapping("/update")
-    public Map<String, Object> update(@RequestParam Map<String, Object> params){
-        return userService.update(params);
-    }
-    @GetMapping("/delete")
-    public Map<String, Object> delete(@RequestParam Map<String, Object> params){
-        return userService.delete(Long.parseLong(params.get("id") + ""));
+    @GetMapping("/mlist")
+    public ResponseEntity<List<UserDto.DetailResDto>> mlist(UserDto.ScrollListReqDto param){
+        return ResponseEntity.ok(userService.scrollList(param));
     }
 }

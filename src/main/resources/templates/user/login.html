@@ -6,19 +6,32 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
-로그인
+LOGIN
 
-아이디
-<input type="text" id="create_user_username" />
-비번
-<input type="password" id="create_user_password" />
+<div id="div_id" class="div_abcde">
+    사용자 로그인
+</div>
+
+*아이디
+<input type="text" class="input_required" id="create_user_username" placeholder="아이디를 입력해주세요!"/>
+*비번
+<input type="password" class="input_required" id="create_user_password" placeholder="비밀번호를 입력해주세요!"/>
 
 <button onclick="login_user()">
-    로그인
+    저장
 </button>
 
 <script>
     function login_user(){
+        let input_required = $(".input_required");
+        for(let each of input_required){
+            let tempValue = $.trim($(each).val());
+            if(tempValue == null || tempValue === ""){
+                alert($(each).attr("placeholder"));
+                $(each).focus();
+                return false;
+            }
+        }
         $.ajax({
             url: "/api/user/login",
             type: "POST",
@@ -31,7 +44,7 @@
             success: (obj_data, status, xhr)=>{
                 //alert(JSON.stringify(obj_data));
                 localStorage.setItem("userId", obj_data["id"]);
-                alert(localStorage.getItem("userId"));
+                location.replace("/index");
             },
             error: (obj_data, status, xhr)=>{
                 alert("error!!");

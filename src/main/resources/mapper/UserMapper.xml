@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thc.fallsprbasic.mapper.UserMapper">
+
+	<!---->
+
+	<select id="detail" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.UserDto$DetailResDto">
+		SELECT user.id
+			 , user.deleted
+			 , user.created_at as createdAt
+			 , user.modified_at as modifiedAt
+			 , user.username
+			 , user.name
+			 , user.phone
+		FROM user
+		WHERE user.id = #{id}
+	</select>
+	<select id="list" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.UserDto$DetailResDto">
+		SELECT user.id
+		FROM user
+		WHERE user.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND user.deleted = #{deleted}</if>
+		<if test = "name != null and name !=''">AND user.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND user.phone LIKE CONCAT('%', #{phone})</if>
+	</select>
+
+	<select id="pagedList" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.UserDto$DetailResDto">
+		SELECT user.id
+		FROM user
+		WHERE user.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND user.deleted = #{deleted}</if>
+		<if test = "name != null and name !=''">AND user.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND user.phone LIKE CONCAT('%', #{phone})</if>
+		<if test = "orderby != null and orderby =='created_at'">ORDER BY user.created_at</if>
+		<if test = "orderby != null and orderby =='title'">ORDER BY user.title </if>
+		<if test = "orderway != null and orderway =='desc'"> DESC</if>
+		<if test = "orderway != null and orderway =='asc'"> ASC</if>
+		LIMIT #{offset}, #{perpage}
+	</select>
+	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
+		SELECT count(user.id) as listsize
+		FROM user
+		WHERE user.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND user.deleted = #{deleted}</if>
+		<if test = "name != null and name !=''">AND user.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND user.phone LIKE CONCAT('%', #{phone})</if>
+	</select>
+
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.UserDto$DetailResDto">
+		SELECT user.id
+		FROM user
+		WHERE user.id is not NULL
+		<if test = "deleted != null and deleted !=''">AND user.deleted = #{deleted}</if>
+		<if test = "name != null and name !=''">AND user.name LIKE CONCAT('%', #{name}, '%')</if>
+		<if test = "phone != null and phone !=''">AND user.phone LIKE CONCAT('%', #{phone})</if>
+		<if test = "orderway != null and orderway =='desc'">
+			<if test = "createdAt != null and createdAt !=''">AND #{createdAt} > user.created_at</if>
+			ORDER BY user.created_at DESC
+		</if>
+		<if test = "orderway != null and orderway =='asc'">
+			<if test = "createdAt != null and createdAt !=''">AND user.created_at > #{createdAt}</if>
+			ORDER BY user.created_at ASC
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
+
+</mapper>

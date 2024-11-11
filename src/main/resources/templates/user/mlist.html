@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+scroll list
+한번에 볼 페이지 수: <input type="number" id="search_perpage" value="3" onchange="mList()"/>
+정렬방향 :
+<select id="search_orderway" onchange="mList()">
+    <option value="desc">역순</option>
+    <option value="asc">정순</option>
+</select>
+<br/>
+
+검색어 이름: <input id="search_user_name" onchange="mList()"/>
+검색어 전화번호: <input id="search_user_phone" onchange="mList()"/>
+<button onclick="mList('asc')">최신 정보 더보기</button>
+<button onclick="mList()">이전 정보 더보기</button>
+<div id="div_list">
+</div>
+
+<script>
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        mList();
+    });
+    function mList(obj_orderway){
+        if(obj_orderway != null){
+            $("#search_orderway").val(obj_orderway);
+        } else {
+            $("#search_orderway").val("desc");
+        }
+        let search_orderway = $("#search_orderway").val();
+
+        let search_cursor = "";
+
+        let input_user_created_at = $(".input_user_created_at");
+        let input_user_created_at_length = input_user_created_at.length;
+        if(input_user_created_at_length > 0){
+            if(search_orderway === "desc"){
+                search_cursor = $(input_user_created_at[input_user_created_at_length - 1]).attr("keyword");
+            } else {
+                search_cursor = $(input_user_created_at[0]).attr("keyword");
+            }
+        }
+
+        $.ajax({
+            url: "/api/user/mlist",
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            data: {
+                name : $("#search_user_name").val() //검색(이름)할때 필요
+                , phone : $("#search_user_phone").val() //검색(전화번호)할때 필요
+                , perpage : $("#search_perpage").val()
+                , orderway : search_orderway
+                , cursor : search_cursor
+            },
+            cache: false,
+            success: (obj_data, status, xhr)=>{
+                //alert(JSON.stringify(obj_data));
+                if(search_orderway === "desc"){
+                    for(let each of obj_data){
+                        $("#div_list").append(
+                            "<a href='/user/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["username"] + "//" + each["createdAt"] + "<br/>"
+                            +"<input type='hidden1' class='input_user_created_at' value='"+each["createdAt"]+"' keyword='"+each["id"]+"'/>"+ "<br/>"
+                        );
+                    }
+                } else {
+                    for(let each of obj_data){
+                        $("#div_list").prepend(
+                            "<a href='/user/detail/"+each["id"]+"'>"+each["id"]+"</a>" + "//" + each["title"] + "//" + each["createdAt"] + "<br/>"
+                            +"<input type='hidden1' class='input_user_created_at' value='"+each["createdAt"]+"' keyword='"+each["id"]+"'/>"+ "<br/>"
+                        );
+                    }
+                }
+
+            },
+            error: (obj_data, status, xhr)=>{
+                alert("error!!");
+                alert(JSON.stringify(obj_data));
+            }
+        });
+    }
+    /*
+    */
+</script>
+
+</body>
+</html>

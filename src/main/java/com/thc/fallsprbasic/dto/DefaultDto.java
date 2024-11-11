@@ -80,9 +80,11 @@ public class DefaultDto {
             Integer perpage = param.getPerpage();
             if(perpage == null){
                 param.setPerpage(10);
+                perpage = param.getPerpage();
             } else {
                 if(perpage < 0){
                     param.setPerpage(10);
+                    perpage = param.getPerpage();
                 }
             }
 
@@ -94,6 +96,7 @@ public class DefaultDto {
             if(callpage < 1){ callpage = 1; }
             if(callpage > pagecount){ callpage = pagecount; }
             int offset = (callpage - 1) * perpage;
+            if(offset < 0){ offset = 0; }
             param.setOffset(offset);
 
             //정렬 기준

@@ -25,7 +25,6 @@ public class DefaultController {
         return "test";
     }
 
-
     @ResponseBody
     @GetMapping(value = "/image/{file_name:.+}")
     public byte[] getImage(@PathVariable("file_name") String file_name) {

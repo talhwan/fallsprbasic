@@ -1,53 +1,59 @@
 package com.thc.fallsprbasic.dto;
 
 import com.thc.fallsprbasic.domain.User;
-import lombok.Getter;
-import lombok.Setter;
+import com.thc.fallsprbasic.domain.Notice;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 public class UserDto {
 
-    @Setter
-    @Getter
-    public static class CreateReqDto {
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class LoginReqDto{
+        private String username;
+        private String password;
+    }
+
+    /**/
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class CreateReqDto extends DefaultDto.CreateReqDto {
         private String username;
         private String password;
         private String name;
         private String phone;
 
-        public User toEntity() {
-            User user = new User();
-            user.setUsername(getUsername());
-            user.setPassword(getPassword());
-            user.setName(getName());
-            user.setPhone(getPhone());
-            return user;
+        public User toEntity(){
+            return User.of(getUsername(), getPassword(), getName(), getPhone());
         }
     }
-    @Setter
-    @Getter
-    public static class LoginReqDto {
-        private String username;
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class UpdateReqDto extends DefaultDto.UpdateReqDto {
         private String password;
-    }
-    @Setter
-    @Getter
-    public static class LoginResDto {
-        //private boolean result;
-        private Long id;
-    }
-
-    @Setter
-    @Getter
-    public static class UpdateReqDto {
-        private Long id;
         private String name;
         private String phone;
     }
 
-    @Setter
-    @Getter
-    public static class CreateResDto {
-        private Long id;
+    @AllArgsConstructor @NoArgsConstructor @Setter @Getter
+    public static class DetailResDto extends DefaultDto.DetailResDto {
+        private String username;
+        private String name;
+        private String phone;
+    }
+
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class ListReqDto extends DefaultDto.ListReqDto {
+        private String name;
+        private String phone;
+    }
+
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class PagedListReqDto extends DefaultDto.PagedListReqDto {
+        private String name;
+        private String phone;
+    }
+    @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
+    public static class ScrollListReqDto extends DefaultDto.ScrollListReqDto {
+        private String name;
+        private String phone;
     }
 
 }

@@ -9,13 +9,13 @@
 create
 
 <div id="div_id" class="div_abcde">
-    사용자 입력 테스트
+    사용자 신규 입력
 </div>
 
-아이디
-<input type="text" id="create_user_username" />
-비번
-<input type="password" id="create_user_password" />
+*아이디
+<input type="text" class="input_required" id="create_user_username" placeholder="아이디를 입력해주세요!"/>
+*비번
+<input type="password" class="input_required" id="create_user_password" placeholder="비밀번호를 입력해주세요!"/>
 이름
 <input type="text" id="create_user_name" />
 전화번호
@@ -27,8 +27,19 @@ create
 
 <script>
     function create_user(){
+        let input_required = $(".input_required");
+        for(let each of input_required){
+            let tempValue = $.trim($(each).val());
+            if(tempValue == null || tempValue === ""){
+                alert($(each).attr("placeholder"));
+                $(each).focus();
+                return false;
+            }
+        }
+
+
         $.ajax({
-            url: "/api/user/create",
+            url: "/api/user",
             type: "POST",
             contentType : 'application/json; charset=utf-8',
             data: JSON.stringify({

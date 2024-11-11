@@ -9,9 +9,9 @@
 detail
 
 <input type="text" id="detail_user_id" readonly/>
+<input type="text" id="detail_user_title" />
+<input type="text" id="detail_user_content" />
 <input type="text" id="detail_user_username" readonly/>
-<input type="text" id="detail_user_name" />
-<input type="text" id="detail_user_phone" />
 
 <button onclick="update_user()">
     수정
@@ -46,9 +46,9 @@ detail
             success: (obj_data, status, xhr)=>{
 
                 $("#detail_user_id").val(obj_data["id"]);
-                $("#detail_user_username").val(obj_data["username"]);
-                $("#detail_user_name").val(obj_data["name"]);
-                $("#detail_user_phone").val(obj_data["phone"]);
+                $("#detail_user_title").val(obj_data["title"]);
+                $("#detail_user_content").val(obj_data["content"]);
+                $("#detail_user_username").val(obj_data["userUsername"]);
             },
             error: (obj_data, status, xhr)=>{
                 alert("error!!");
@@ -59,14 +59,14 @@ detail
 
     function update_user(){
         $.ajax({
-            url: "/api/user/update",
-            type: "GET",
+            url: "/api/user",
+            type: "PUT",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 id : final_id
-                ,name : $("#detail_user_name").val()
-                ,phone : $("#detail_user_phone").val()
-            },
+                ,title : $("#detail_user_title").val()
+                ,content : $("#detail_user_content").val()
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));
@@ -79,12 +79,12 @@ detail
     }
     function delete_user(){
         $.ajax({
-            url: "/api/user/delete",
-            type: "GET",
+            url: "/api/user",
+            type: "DELETE",
             contentType : 'application/json; charset=utf-8',
-            data: {
+            data: JSON.stringify({
                 id : final_id
-            },
+            }),
             cache: false,
             success: (obj_data, status, xhr)=>{
                 alert(JSON.stringify(obj_data));

@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 </head>
 <body>
 인덱스 입니다!
+
+<button onclick="user_logout()">로그아웃!</button>
+
+<script>
+    let userId = localStorage.getItem("userId");
+    alert(userId);
+
+    function user_logout(){
+        localStorage.clear();
+    }
+</script>
 </body>
 </html>
