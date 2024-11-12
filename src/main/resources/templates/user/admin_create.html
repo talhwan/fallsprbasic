@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head th:replace="~{@{includes/admin/head}}"></head>
+</head>
+<body>
+
+<div id="wrapper">
+    <body th:replace="~{@{includes/admin/nav}}"></body>
+    <script>
+        $(".sidemenu_li_user").addClass("active");
+    </script>
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <body th:replace="~{@{includes/admin/navbar_top}}"></body>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>사용자 신규</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/admin">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/user/admin_list">사용자 관리</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/user/admin_list">사용자 목록</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <strong>사용자 신규</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
+        <div class="animated fadeInRight" style="padding-top:12.5px;padding-bottom:0px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox-title">
+                        <h5>신규 등록</h5>
+                    </div>
+                    <div class="ibox-content" style="padding-bottom:0.1px;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">*아이디</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="input_required form-control m-b" id="create_user_username" keyword="username" placeholder="아이디를 입력해주세요!" errormsg="필수값입니다."/>
+                            </div>
+                            <label class="col-sm-6"></label>
+                            <label class="col-sm-2 col-form-label">*비밀번호</label>
+                            <div class="col-sm-4">
+                                <input type="password" class="input_required form-control m-b" id="create_user_password" keyword="password" placeholder="비밀번호를 입력해주세요!" errormsg="필수값입니다."/>
+                            </div>
+                            <label class="col-sm-6"></label>
+
+
+                            <label class="col-sm-2 col-form-label">*이름</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="input_required form-control m-b" id="create_user_name" keyword="name" placeholder="이름을 입력해주세요!" errormsg="필수값입니다."/>
+                            </div>
+                            <label class="col-sm-2 col-form-label">전화번호</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control m-b" id="create_user_phone" keyword="phone" placeholder="이름을 입력해주세요!" errormsg="필수값입니다."/>
+                            </div>
+                        </div>
+                        <div class="m-b" style="text-align: right;">
+                            <button class="btn btn-primary btn-sm" onclick="create_tbnotice()">등록하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $( document ).ready(function() {
+                console.log( "ready!" );
+            });
+            function create_tbnotice(){
+                if(!listenerBeforeCreate()){
+                    return false;
+                }
+                let _param = {
+                    'username' : $("#create_user_username").val(),
+                    'password' : $("#create_user_password").val(),
+                    'name' : $("#create_user_name").val(),
+                    'phone' : $("#create_user_phone").val()
+                };
+
+                $.ajax({
+                    url: "/api/user",
+                    type: "POST",
+                    contentType : 'application/json; charset=utf-8',
+                    data: JSON.stringify(_param),
+                    cache: false,
+                    success: (obj_data, status, xhr)=>{
+                        alert(JSON.stringify(obj_data));
+                    },
+                    error: (obj_data, status, xhr)=>{
+                        alert("error!!");
+                        alert(JSON.stringify(obj_data));
+                    }
+                });
+
+            }
+        </script>
+        <body th:replace="~{@{includes/admin/footer}}"></body>
+    </div>
+    <body th:replace="~{@{includes/admin/right_sidebar}}"></body>
+</div>
+<body th:replace="~{@{includes/admin/bottom}}"></body>
+</body>
+</html>

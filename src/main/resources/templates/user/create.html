@@ -50,11 +50,13 @@ create
             }),
             cache: false,
             success: (obj_data, status, xhr)=>{
-                alert(JSON.stringify(obj_data));
+                alert("등록되었습니다.");
+                location.reload();
+                /*alert(JSON.stringify(obj_data));*/
             },
             error: (obj_data, status, xhr)=>{
-                alert("error!!");
-                alert(JSON.stringify(obj_data));
+                alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                /*alert(JSON.stringify(obj_data));*/
             }
         });
     }

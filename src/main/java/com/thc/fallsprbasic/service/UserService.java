@@ -16,6 +16,7 @@ public interface UserService {
     DefaultDto.CreateResDto create(UserDto.CreateReqDto param);
     void update(UserDto.UpdateReqDto param);
     void delete(Long id);
+    void deletes(DefaultDto.DeletesReqDto param);
     UserDto.DetailResDto detail(Long id);
     List<UserDto.DetailResDto> list(UserDto.ListReqDto param);
     DefaultDto.PagedListResDto pagedList(UserDto.PagedListReqDto param);

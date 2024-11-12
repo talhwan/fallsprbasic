@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head th:replace="~{@{includes/admin/head}}"></head>
+</head>
+<body>
+
+<script id="list_info_user" type="text/x-handlebars-template">
+    {{#resultData_user}}
+    <tr class="gradeA">
+        <td>
+            <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
+        </td>
+        <td><font class="font_order"></font></td>
+        <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
+        <td class="cursor_pointer" onclick="location.href='/user/admin_detail/{{id}}';">{{username}}</td>
+        <td class="cursor_pointer" onclick="location.href='/user/admin_detail/{{id}}';">{{name}}</td>
+        <td class="cursor_pointer" onclick="location.href='/user/admin_detail/{{id}}';">{{phone}}</td>
+        <td>{{createdAt}} / {{modifiedAt}}
+            <div class="hide">
+                <input class="input_cursor_createdAt" value="{{createdAt}}"/>
+                <input class="input_cursor_title" value="{{title}}"/>
+            </div>
+        </td>
+    </tr>
+    {{/resultData_user}}
+</script>
+<script type="text/javascript">
+    var list_info_user = $("#list_info_user").html();
+    var list_info_user_template = Handlebars.compile(list_info_user);
+</script>
+
+<div id="wrapper">
+    <body th:replace="~{@{includes/admin/nav}}"></body>
+    <script>
+        $(".sidemenu_li_user").addClass("active");
+    </script>
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <body th:replace="~{@{includes/admin/navbar_top}}"></body>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>사용자 목록</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/admin">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/user/admin_list">사용자 관리</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <strong>사용자 목록</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
+        <div class="animated fadeInRight" style="padding-top:12.5px;padding-bottom:0px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox-content" style="padding-bottom:0.1px;">
+                        <input type="hidden" id="input_keyword_changed" value="0" />
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">삭제여부</label>
+                            <div class="col-sm-4">
+                                <select class="select_search_keyword form-control m-b" keyword="deleted" id="search_user_deleted" onchange="listener_keyword_changed()">
+                                    <option value="" selected="selected">전체</option>
+                                    <option value="false">일반</option>
+                                    <option value="true">삭제</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-6 col-form-label"></label>
+                            <label class="col-sm-2 col-form-label">등록 시기</label>
+                            <div class="col-sm-3">
+                                <input class="form-control" id="search_sdate" type="date" onchange="listener_keyword_changed()"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <input class="form-control" id="search_fdate" type="date" onchange="listener_keyword_changed()"/>
+                            </div>
+                            <div class="col-sm-4">
+                                <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('null'); return false;">초기화</button>
+                                <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('today'); return false;">오늘</button>
+                                <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('week'); return false;">1주</button>
+                                <button class="btn btn-default btn-sm" onclick="set_search_sdatefdate('month'); return false;">1개월</button>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">키워드</label>
+                            <div class="col-sm-4">
+                                <select class="form-control m-b" id="search_keyword" onchange="set_search_keyword()">
+                                    <option value="10" selected="selected">이름</option>
+                                    <option value="20">전화번호</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="search_user_name" onchange="listener_keyword_changed();" class="form-control search_keyword_each search_keyword_each_10" type="text" placeholder="내용을 입력하세요"/>
+                                <input id="search_user_phone" onchange="listener_keyword_changed();" class="form-control search_keyword_each search_keyword_each_20 hide" type="text" placeholder="내용을 입력하세요"/>
+                            </div>
+
+                            <input type="hidden" id="cursor" />
+                            <label class="col-sm-2 col-form-label">검색 기준</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" id="search_orderby" onchange="listener_keyword_changed();">
+                                    <option value="created_at" selected="selected">등록순</option>
+                                    <option value="name">이름순</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">한번에 불러올 갯수</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" id="search_perpage" onchange="listener_keyword_changed();">
+                                    <option value="10" selected="selected">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <label class="col-sm-2 col-form-label">조회방향</label>
+                            <div class="col-sm-2">
+                                <select class="form-control" id="search_orderway" onchange="listener_keyword_changed();">
+                                    <option value="desc" selected="selected">역방향</option>
+                                    <option value="asc">정방향</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ibox" style="padding-bottom: 50px;">
+            <div class="ibox-content">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input class="input_chk_delete_all" type="checkbox" keyword="all" id="input_chk_delete_all" onclick="listener_chk_delete(this)" />
+                        </th>
+                        <th>#</th>
+                        <th>삭제여부</th>
+                        <th>아이디</th>
+                        <th>이름</th>
+                        <th>전화번호</th>
+                        <th>입력일시/수정일시</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody_user_list">
+                    </tbody>
+                </table>
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="delete_user()">일괄삭제</button>
+                        </td>
+                        <td id="div_page_number">
+                        </td>
+                        <td style="text-align: right;">
+                            <button class="btn btn-default btn-sm" onclick="location.href='/user/admin_create'">추가하기</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <script>
+            function delete_user(){
+                if (confirm("정말 삭제하시겠습니까?")) {
+                } else {
+                    alert("취소");
+                    return false;
+                }
+                let ids = listenerGetDeleteIds();
+                let _data = new Map();
+                _data.url = "/api/user/list";
+                _data.type = "DELETE";
+                _data.param = {
+                    'ids' : ids
+                };
+                _data.success = function(obj_data, obj_status, obj_xhr){
+                    search_user();
+                }
+                _data.error = function(obj_data, obj_status, obj_xhr){
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
+            }
+        </script>
+        <script>
+            $( document ).ready(function() {
+                console.log( "ready!" );
+                search_user();
+            });
+        </script>
+
+        <script>
+            function listener_keyword_changed(){
+                $("#input_keyword_changed").val("1");
+                search_user();
+            }
+            function listener_callpage(obj_num){
+                $("#search_callpage").val(obj_num);
+                search_user();
+            }
+            function search_user() {
+                let user_deleted = null;
+                if($("#search_user_deleted").val() !== ""){
+                    user_deleted = ($("#search_user_deleted").val() === "true");
+                }
+                $.ajax({
+                    url: "/api/user/plist",
+                    type: "GET",
+                    contentType : 'application/json; charset=utf-8',
+                    data: {
+                        perpage : $("#search_perpage").val()
+                        , callpage : $("#search_callpage").val()
+                        , orderby : $("#search_orderby").val()
+                        , orderway : $("#search_orderway").val()
+
+                        , sdate : $("#search_sdate").val()
+                        , fdate : $("#search_fdate").val()
+
+                        , deleted : user_deleted
+                        , name : $("#search_user_name").val()
+                        , phone : $("#search_user_phone").val()
+                    },
+                    cache: false,
+                    success: (obj_data, status, xhr)=>{
+                        $("#tbody_user_list").html("");
+                        $("#div_page_number").html("");
+                        let tempList = obj_data["list"];
+                        for(let each of tempList){
+                            let tList = [];
+                            tList.push(each);
+                            $("#tbody_user_list").append(list_info_user_template({"resultData_user":tList}));
+                        }
+                        $("#info_total_itemcount").val(obj_data["itemcount"]);
+                        $("#info_total_pagecount").val(obj_data["pagecount"]);
+                        $("#search_callpage").val(obj_data["callpage"]);
+
+                        //alert(JSON.stringify(obj_data));
+                        let tempOrder = (Number(obj_data["callpage"]) - 1) * Number($("#search_perpage").val());
+                        let font_order = $(".font_order");
+                        for(let each of font_order){
+                            $(each).text(++tempOrder);
+                        }
+
+                        let select_search_keyword = $(".select_search_keyword");
+                        for (let t = 0; t < select_search_keyword.length; t++) {
+                            //search_deleted
+                            let select_temp_name = $(select_search_keyword[t]).attr("keyword"); //deleted
+                            let option_temps = $(select_search_keyword[t]).find("option"); // <option value="false">일반</option>
+                            for(let i=0;i<option_temps.length;i++){
+                                let a_html = $(option_temps[i]).html(); //일반
+                                let a_value = $(option_temps[i]).attr("value"); //false
+                                $(".font_"+ select_temp_name +"_" + a_value).html(a_html);
+                            }
+                        }
+
+                        let callpage = obj_data["callpage"];
+                        //가장 앞 페이지로 긴급 이동
+                        $("#div_page_number").append(
+                            "<a href='javascript:listener_callpage(1)'>&lt;&lt;</a> &nbsp; &nbsp;"
+                        );
+                        //현재 페이지 보다 앞페이지로 이동 하는 부분
+                        for(let i=0;i<3;i++){
+                            let tempPage = callpage - 3 + i;
+                            if(tempPage > 0){
+                                $("#div_page_number").append(
+                                    "<a href='javascript:listener_callpage("+tempPage+")'>"+tempPage+"</a> &nbsp; &nbsp;"
+                                );
+                            }
+                        }
+
+                        $("#div_page_number").append(
+                            "<a href='javascript:listener_callpage("+callpage+")'>"+callpage+"</a> &nbsp; &nbsp;"
+                        );
+
+                        //현재 페이지 보다 뒤페이지로 이동 하는 부분
+                        for(let i=0;i<3;i++){
+                            let tempPage = callpage + 1 + i;
+                            if(tempPage <= obj_data["pagecount"]){
+                                $("#div_page_number").append(
+                                    "<a href='javascript:listener_callpage("+tempPage+")'>"+tempPage+"</a> &nbsp; &nbsp;"
+                                );
+                            }
+                        }
+
+                        $("#div_page_number").append(
+                            "<a href='javascript:listener_callpage("+obj_data["pagecount"]+")'>&gt;&gt;</a> &nbsp; &nbsp;"
+                        );
+
+                        /*
+                        << 12 13 14 15 '16' 17 18 19 20 >>
+                        * */
+
+
+                    },
+                    error: (obj_data, status, xhr)=>{
+                        alert("error!!");
+                        alert(JSON.stringify(obj_data));
+                    }
+                });
+            }
+        </script>
+
+
+        <body th:replace="~{@{includes/admin/footer}}"></body>
+    </div>
+    <body th:replace="~{@{includes/admin/right_sidebar}}"></body>
+</div>
+<body th:replace="~{@{includes/admin/bottom}}"></body>
+</body>
+</html>
