@@ -24,6 +24,7 @@ public class UserRestController {
     }
 
     /**/
+
     @PostMapping("")
     public ResponseEntity<DefaultDto.CreateResDto> create(@RequestBody UserDto.CreateReqDto param){
         return ResponseEntity.ok(userService.create(param));

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BONHAIR | 상담차트 등록</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+        <link href="css/animate.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+        <link href="css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+        <!-- Jasny 파일 -->
+        <link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+       <!-- Mainly scripts -->
+        <script src="js/jquery-3.1.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.js"></script>
+        <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+        <!-- Custom and plugin javascript -->
+        <script src="js/inspinia.js"></script>
+        <script src="js/plugins/pace/pace.min.js"></script>
+
+        <!-- Data picker -->
+        <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+
+        <!-- Dual Listbox -->
+        <script src="js/plugins/dualListbox/jquery.bootstrap-duallistbox.js"></script>
+
+        <!-- iCheck -->
+        <script src="js/plugins/iCheck/icheck.min.js"></script>
+
+        <!-- Jasny 파일 -->
+        <script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green',
+                });
+
+                /*
+                $('#aprice').change(function() {
+                    alert($('#text2').val());
+                    var a = Number($('#text2').val()) + Number($('#aprice').val());
+                    $('#text2').val(a);
+                });
+                */
+
+                $('input:checkbox').change(function() {
+
+                    var text = '';
+                    var price = 0;
+                    var arr;
+                    var trueCheck = 0;
+                    $("input:checkbox[name='price']").each(function() {
+                        if($(this).prop('checked') == true) {
+                            trueCheck++;
+                            $('#text1').val('');
+                            $('#price').val(0);
+                            var type = $(this).prop('value');
+                            switch (type) {
+                                case 'cut_1' :
+                                    arr = '컷 - 멋지고이쁜컷:16000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'cut_2' :
+                                    arr = '컷 - 멋진학생:12000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'cut_3' :
+                                    arr = '컷 - 시원샴푸:8000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'cut_4' :
+                                    arr = '컷 - 이쁜드라이:14000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'cut_5' :
+                                    arr = '컷 - 중요한앞머리:3000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'firm_1_1' :
+                                    arr = '펌1 - 너무이펌:55000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_1_2' :
+                                    arr = '펌1 - 모발에탄력을:66000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_1_3' :
+                                    arr = '펌1 - 모발에생명을:77000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_1_4' :
+                                    arr = '펌1 - 앞머리:15000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_1_5' :
+                                    arr = '펌1 - 부분:33000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_1_6' :
+                                    arr = '펌1 - 초슬림다운:33000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_1_7' :
+                                    arr = '펌1 - 산다살어뿌리:55000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'firm_2_1' :
+                                    arr = '펌2 - 정말이펌:77000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_2_2' :
+                                    arr = '펌2 - PH약약카리 ~ 중성:88000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_2_3' :
+                                    arr = '펌2 - PH중 ~ 약산성:99000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_2_4' :
+                                    arr = '펌2 - 앞머리:35000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_2_5' :
+                                    arr = '펌2 - 부분:33000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'firm_3_1' :
+                                    arr = '펌3 - 멋쟁이펌:88000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_3_2' :
+                                    arr = '펌3 - PH약약카리 ~ 중성:99000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_3_3' :
+                                    arr = '펌3 - PH중 ~ 약산성:100000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'firm_4_1' :
+                                    arr = '펌4 - 윤기나고너무이펌:120000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_4_2' :
+                                    arr = '펌4 - PH약약카리 ~ 중성:130000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_4_3' :
+                                    arr = '펌4 - PH중 ~ 약산성:140000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'firm_5_1' :
+                                    arr = '펌5 - 새생명펌:250000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'firm_5_2' :
+                                    arr = '펌5 - 윤기나고너무이펌:300000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'dyeing_1_1' :
+                                    arr = '컬러1 - 퍼스널컬러:55000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_1_2' :
+                                    arr = '컬러1 - 두피보호:66000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_1_3' :
+                                    arr = '컬러1 - 두피 + 모발보호:77000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_1_4' :
+                                    arr = '컬러1 - 뿌리:33000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'dyeing_2_1' :
+                                    arr = '컬러2 - 밝은세상컬러:66000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_2_2' :
+                                    arr = '컬러2 - 두피보호:77000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_2_3' :
+                                    arr = '컬러2 - 두피 + 모발보호:88000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_2_4' :
+                                    arr = '컬러2 - 뿌리:44000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'dyeing_3_1' :
+                                    arr = '컬러3 - 주인공컬러:120000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'dyeing_4_1' :
+                                    arr = '컬러4 - 천연컬러를요리하다:120000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'dyeing_4_2' :
+                                    arr = '컬러4 - 뿌리:60000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'course_1_1' :
+                                    arr = '케어1 - 코스1 [S+1+1]:30000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'course_1_2' :
+                                    arr = '케어1 - 코스2 [S+1+2+3]:50000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'course_1_3' :
+                                    arr = '케어1 - 코스3 [S+1+2+3+T+A]:80000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+
+                                case 'course_2_1' :
+                                    arr = '케어2 - 코스1 [SC+SS+TO]:30000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'course_2_2' :
+                                    arr = '케어2 - 코스2 [SC+SS+P+TO+R]:50000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                                case 'course_2_3' :
+                                    arr = '케어2 - 코스3 [SC+SS+P+TO+AMP+R]:80000'.split(':');
+                                    text += arr[0];
+                                    price += Number(arr[1]);
+                                    break;
+                            }
+
+                            if(text != '') {
+                                $('#text1').val(text);
+                            } else {
+                                $('#text1').val(text);
+                            }
+
+                            $('#text2').val(price);
+
+                        }
+                        if(trueCheck == 0) {
+                            $('#text1').val('');
+                            $('#text2').val(0);
+                        }
+                    });
+                });
+
+            });
+
+
+        </script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <img alt="image" class="rounded-circle" src="img/bonhair.png"/>
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="block m-t-xs font-bold">이창원</span>
+                                    <span class="text-muted text-xs block">bonhair1220@gmail.com <b class="caret"></b></span>
+                                </a>
+                                <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                    <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                                    <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>
+                                    <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>
+                                    <li class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+                                </ul>
+                            </div>
+                        <div class="logo-element">
+                        IN+
+                        </div>
+                        </li>
+                    <li class="active">
+                    <a href="table_basic.html"><i class="active fa fa-drivers-license"></i> <span class="nav-label">상담차트</span></a>
+                    </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id="page-wrapper" class="gray-bg">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                            <form role="search" class="navbar-form-custom" action="search_results.html">
+                                <div class="form-group">
+                                    <input type="text" placeholder="상담차트" class="form-control" name="top-search" id="top-search">
+                                </div>
+                            </form>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li>
+                                <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
+                            </li>
+                            <li>
+                                <a href="login.html">
+                                    <i class="fa fa-sign-out"></i> Log out
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>상담차트 등록</h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <form id="form" method="get">
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">상담자</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control m-b" name="account">
+                                                    <option>창원</option>
+                                                    <option>여리</option>
+                                                    <option>나경</option>
+                                                    <option>준영</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">고객이름</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                        </div>
+                                        <div class="form-group row"><label class="col-sm-2 col-form-label">성별</label>
+                                            <div class="col-sm-10">
+                                                <div class="i-checks">
+                                                    <label><input type="radio" value="option1" name="a"> <i></i> &nbsp; 여성 &nbsp;&nbsp;</label>
+                                                    <label><input type="radio" checked="" value="option2" name="a"> <i></i> &nbsp; 남성 </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">휴대폰번호</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                            <!--
+                                            <div class="col-md-2"><input type="text" class="form-control"></div>
+                                            <div class="col-md-2"><input type="text" class="form-control"></div>
+                                            <div class="col-md-2"><input type="text" class="form-control"></div>
+                                            -->
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">개인정보 동의</label>
+                                            <div class="col-sm-10"><p><input type="checkbox" value="">&nbsp;개인정보수집이용 동의 (필수)</p>
+                                                <!--
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h5 class="panel-title">
+                                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><input type="checkbox" value="">&nbsp;&nbsp;개인정보수집이용 동의 (필수)</a>
+                                                        </h5>
+                                                    </div>
+                                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                                        <div class="panel-body">
+                                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">이미지 ( 앞 )</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file">
+                                                    <span class="fileinput-new">Select file</span>
+                                                    <span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="...">
+                                                </span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">이미지 ( 옆 )</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file">
+                                                    <span class="fileinput-new">Select file</span>
+                                                    <span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="...">
+                                                </span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">이미지 ( 뒤 )</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file">
+                                                    <span class="fileinput-new">Select file</span>
+                                                    <span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="...">
+                                                </span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">가격 선택</label>
+                                            <!--
+                                            <div class="col-sm-10">
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 멋지고이쁜컷 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; 멋진학생 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 시원샴푸 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 이쁜드라이 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 중요한앞머리 &nbsp;&nbsp;&nbsp;</label>
+                                            </div>
+                                            -->
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">멋지고이쁜컷</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="cut_1" name="price"> &nbsp; 멋지고이쁜컷1 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="cut_2" name="price"> &nbsp; 멋진학생 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="cut_3" name="price"> &nbsp; 시원샴푸 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="cut_4" name="price"> &nbsp; 이쁜드라이 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="cut_5" name="price"> &nbsp; 중요한앞머리 &nbsp;&nbsp;&nbsp;
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 멋지고이쁜컷1 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; 멋진학생 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 시원샴푸 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 이쁜드라이 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 중요한앞머리 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">너무이펌</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="firm_1_1" name="price"> &nbsp; 너무이펌 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_1_2" name="price"> &nbsp; 모발에탄력을 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_1_3" name="price"> &nbsp; 모발에생명을 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_1_4" name="price"> &nbsp; 앞머리 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_1_5" name="price"> &nbsp; 부분 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_1_6" name="price"> &nbsp; 초슬림다운 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_1_7" name="price"> &nbsp; 산다살어뿌리 &nbsp;&nbsp;&nbsp;
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 너무이펌 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; 모발에탄력을 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 모발에생명을 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 앞머리 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 부분 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 초슬림다운 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 산다살어뿌리 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">정말이펌</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="firm_2_1" name="price"> &nbsp; 정말이펌 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_2_2" name="price"> &nbsp; pH약약카리 ~ 중성 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_2_3" name="price"> &nbsp; pH중 ~ 약산성 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_2_4" name="price"> &nbsp; 앞머리 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_2_5" name="price"> &nbsp; 부분 &nbsp;&nbsp;&nbsp;
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 정말이펌 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; pH약약카리 ~ 중성 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; pH중 ~ 약산성 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 앞머리 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 부분 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">멋쟁이펌</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="firm_3_1" name="price"> &nbsp; 멋쟁이펌 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_3_2" name="price"> &nbsp; pH약약카리 ~ 중성 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_3_3" name="price"> &nbsp; pH중 ~ 약산성 &nbsp;&nbsp;&nbsp;
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 멋쟁이펌 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; pH약약카리 ~ 중성 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; pH중 ~ 약산성 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">윤기나고너무이펌</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="firm_4_1" name="price"> &nbsp; 윤기나고너무이펌 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_4_2" name="price"> &nbsp; pH약약카리 ~ 중성 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_4_3" name="price"> &nbsp; pH중 ~ 약산성 &nbsp;&nbsp;&nbsp;
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 윤기나고너무이펌 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; pH약약카리 ~ 중성 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; pH중 ~ 약산성 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">새생명펌</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="firm_5_1" name="price"> &nbsp; 새생명펌 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="firm_5_2" name="price"> &nbsp; 윤기나고너무이펌 &nbsp;&nbsp;&nbsp;
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 새생명펌 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 윤기나고너무이펌 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">퍼스널컬러</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="dyeing_1_1" name="price"> &nbsp; 퍼스널컬러 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_1_2" name="price"> &nbsp; 두피보호 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_1_3" name="price"> &nbsp; 두피 + 모발보호 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_1_4" name="price"> &nbsp; 뿌리 &nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">밝은세상컬러</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="dyeing_2_1" name="price"> &nbsp; 밝은세상컬러 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_2_2" name="price"> &nbsp; 두피보호 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_2_3" name="price"> &nbsp; 두피 + 모발보호 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_2_4" name="price"> &nbsp; 뿌리 &nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">주인공컬러</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="dyeing_3_1" name="price"> &nbsp; 주인공컬러 &nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">천연컬러를요리하다</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="dyeing_4_1" name="price"> &nbsp; 천연컬러를요리하다 &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="dyeing_4_2" name="price"> &nbsp; 뿌리 &nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">윤기좔좔모발케어</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="course_1_1" name="price"> &nbsp; 코스1 [S+1+1] &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="course_1_2" name="price"> &nbsp; 코스2 [S+1+2+3] &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="course_1_3" name="price"> &nbsp; 코스3 [S+1+2+3+T+A]&nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">뽀송뽀송두피케어</small></label>
+                                            <div class="col-sm-10">
+                                                <input type="checkbox" value="course_2_1" name="price"> &nbsp; 코스1 [SC+SS+TO] &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="course_2_2" name="price"> &nbsp; 코스2 [SC+SS+P+TO+R] &nbsp;&nbsp;&nbsp;
+                                                <input type="checkbox" value="course_2_3" name="price"> &nbsp; 코스3 [SC+SS+P+TO+AMP+R] &nbsp;&nbsp;&nbsp;
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">모발 사진</label>
+                                            <div class="col-sm-10">
+                                                <a href="img/bon_1.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_1.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_2.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_2.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_3.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_3.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_4.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_4.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_5.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_5.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_6.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_6.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_7.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_7.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_8.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_8.jpeg" style="width: 150px"></a>
+                                                <a href="img/bon_9.jpeg" title="Image from Unsplash" data-gallery=""><img src="img/bon_9.jpeg" style="width: 150px"></a>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">레시피</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">홈케어 처방전</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control">
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 샴푸 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; 컨디셔너 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 트리트먼트 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">처방전 가격</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="aprice">
+                                                <!--
+                                                <label class="checkbox-inline i-checks"><input type="checkbox" value="option1"> &nbsp; 샴푸 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option2"> &nbsp; 컨디셔너 &nbsp;&nbsp;&nbsp;</label>
+                                                <label class="i-checks"> <input type="checkbox" value="option3"> &nbsp; 트리트먼트 &nbsp;&nbsp;&nbsp;</label>
+                                                -->
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">시술 안내</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control" id="text1"></div>
+                                        </div>
+                                        <!--
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">할인 입력</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                        </div>
+                                        -->
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">시술 가격<br/></label>
+                                            <div class="col-sm-10">
+                                                <label class="inline"><input type="text" class="form-control" id="text2"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row" id="data_1"><label class="col-sm-2 col-form-label">다음 방문 예정일</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group date">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" value="03/04/2014">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">고객 싸인</label>
+                                            <div class="col-sm-10"><input type="text" class="form-control"></div>
+                                        </div>
+                                        <!--
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">안내사항</label>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">최종 가격</small></label>
+                                            <div class="col-sm-10" id="finalPrice"></div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">시술</small></label>
+                                            <div class="col-sm-10" id="homeCare"></div>
+                                        </div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label"><small class="text-navy">시술</small></label>
+                                            <div class="col-sm-10" id="finalText"></div>
+                                        </div>
+                                        -->
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-4 col-sm-offset-2">
+                                                <button class="btn btn-white btn-sm" type="submit">Cancel</button>
+                                                <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div>
+                            <strong>Copyright</strong> BONHAIR &copy; 2018
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

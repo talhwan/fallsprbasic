@@ -1,0 +1,21 @@
+body {
+	/*-webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+}
+
+.cursor_pointer {
+	cursor: pointer;
+}
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+}
+
+.hide {
+  display : none;
+}
+.only_pc{display:block;}
+.only_mobile{display:none;}
+@media all and (max-width:800px){
+.only_mobile{display:block;}
+.only_pc{display:none;}
+}
