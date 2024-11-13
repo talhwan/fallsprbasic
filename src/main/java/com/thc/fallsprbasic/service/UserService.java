@@ -1,13 +1,10 @@
 package com.thc.fallsprbasic.service;
 
-import com.thc.fallsprbasic.domain.User;
 import com.thc.fallsprbasic.dto.DefaultDto;
-import com.thc.fallsprbasic.dto.UserDto;
 import com.thc.fallsprbasic.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface UserService {

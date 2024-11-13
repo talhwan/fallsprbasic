@@ -1,13 +1,9 @@
 package com.thc.fallsprbasic.service.impl;
 
 import com.thc.fallsprbasic.domain.User;
-import com.thc.fallsprbasic.domain.Notice;
-import com.thc.fallsprbasic.domain.User;
 import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.UserDto;
-import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.mapper.UserMapper;
-import com.thc.fallsprbasic.repository.UserRepository;
 import com.thc.fallsprbasic.repository.UserRepository;
 import com.thc.fallsprbasic.service.UserService;
 import org.springframework.stereotype.Service;
@@ -55,6 +51,9 @@ public class UserServiceImpl implements UserService {
     public void update(UserDto.UpdateReqDto param) {
         System.out.println("update");
         User user = userRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
+        if(param.getDeleted() != null) {
+            user.setDeleted(param.getDeleted());
+        }
         if(param.getName() != null) {
             user.setName(param.getName());
         }
@@ -65,9 +64,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void delete(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-        user.setDeleted(true);
-        userRepository.save(user);
+        update(UserDto.UpdateReqDto.builder().id(id).deleted(true).build());
     }
     @Override
     public void deletes(DefaultDto.DeletesReqDto param) {

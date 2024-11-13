@@ -3,7 +3,9 @@ package com.thc.fallsprbasic.controller;
 import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.service.NoticeService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,28 +23,45 @@ public class NoticeRestController {
     /**/
 
     @PostMapping("")
-    public DefaultDto.CreateResDto create(@RequestBody NoticeDto.CreateReqDto param){
-        return noticeService.create(param);
+    public ResponseEntity<DefaultDto.CreateResDto> create(
+            /*@RequestPart NoticeDto.CreateReqDto param,
+            @RequestPart(required = false) MultipartFile imgfile*/
+            @RequestBody NoticeDto.CreateReqDto param
+    ){
+        /*String filename = imgfile.getOriginalFilename();
+        System.out.println("file : " + filename);*/
+        return ResponseEntity.ok(noticeService.create(param));
     }
     @PutMapping("")
-    public void update(@RequestBody NoticeDto.UpdateReqDto param){
+    public ResponseEntity<Void> update(@RequestBody NoticeDto.UpdateReqDto param){
         noticeService.update(param);
+        return ResponseEntity.ok().build();
     }
     @DeleteMapping("")
-    public void delete(@RequestBody NoticeDto.UpdateReqDto param){
+    public ResponseEntity<Void> delete(@RequestBody NoticeDto.UpdateReqDto param){
         noticeService.delete(param.getId());
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/list")
+    public ResponseEntity<Void> deletes(@RequestBody DefaultDto.DeletesReqDto param){
+        noticeService.deletes(param);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/detail")
-    public NoticeDto.DetailResDto detail(@RequestParam Long id){
-        return noticeService.detail(id);
+    @GetMapping("")
+    public ResponseEntity<NoticeDto.DetailResDto> detail(@RequestParam Long id){
+        return ResponseEntity.ok(noticeService.detail(id));
     }
     @GetMapping("/list")
-    public List<NoticeDto.DetailResDto> list(NoticeDto.ListReqDto param){
-        return noticeService.list(param);
+    public ResponseEntity<List<NoticeDto.DetailResDto>> list(NoticeDto.ListReqDto param){
+        return ResponseEntity.ok(noticeService.list(param));
     }
-    @GetMapping("/pagedList")
-    public NoticeDto.PagedListResDto pagedList(NoticeDto.PagedListReqDto param){
-        return noticeService.pagedList(param);
+    @GetMapping("/plist")
+    public ResponseEntity<DefaultDto.PagedListResDto> plist(NoticeDto.PagedListReqDto param){
+        return ResponseEntity.ok(noticeService.pagedList(param));
+    }
+    @GetMapping("/mlist")
+    public ResponseEntity<List<NoticeDto.DetailResDto>> mlist(NoticeDto.ScrollListReqDto param){
+        return ResponseEntity.ok(noticeService.scrollList(param));
     }
 }

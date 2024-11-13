@@ -8,20 +8,20 @@ import com.thc.fallsprbasic.repository.NoticeRepository;
 import com.thc.fallsprbasic.service.NoticeService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
 
-    private final NoticeRepository noticeRepository;
-    private final NoticeMapper noticeMapper;
+    private final NoticeRepository userRepository;
+    private final NoticeMapper userMapper;
     public NoticeServiceImpl(
-            NoticeRepository noticeRepository
-            ,NoticeMapper noticeMapper
+            NoticeRepository userRepository
+            , NoticeMapper userMapper
     ) {
-        this.noticeRepository = noticeRepository;
-        this.noticeMapper = noticeMapper;
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     /**/
@@ -29,70 +29,71 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public DefaultDto.CreateResDto create(NoticeDto.CreateReqDto param) {
         System.out.println("create");
-        return noticeRepository.save(param.toEntity()).toCreateResDto();
+        return userRepository.save(param.toEntity()).toCreateResDto();
     }
     @Override
     public void update(NoticeDto.UpdateReqDto param) {
         System.out.println("update");
-        Notice notice = noticeRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
+        Notice user = userRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
+        if(param.getDeleted() != null) {
+            user.setDeleted(param.getDeleted());
+        }
         if(param.getTitle() != null) {
-            notice.setTitle(param.getTitle());
+            user.setTitle(param.getTitle());
         }
         if(param.getContent() != null) {
-            notice.setContent(param.getContent());
+            user.setContent(param.getContent());
         }
-        noticeRepository.save(notice);
+        if(param.getImg() != null) {
+            user.setImg(param.getImg());
+        }
+        userRepository.save(user);
     }
     @Override
-    public Map<String, Object> delete(Long id) {
-        Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException(""));
-        notice.setDeleted(true);
-        noticeRepository.save(notice);
-        /*
-        noticeRepository.delete(notice);
-        */
-        return null;
+    public void delete(Long id) {
+        update(NoticeDto.UpdateReqDto.builder().id(id).deleted(true).build());
+    }
+    @Override
+    public void deletes(DefaultDto.DeletesReqDto param) {
+        for(Long id : param.getIds()){
+            delete(id);
+        }
     }
 
+    public NoticeDto.DetailResDto get(Long id) {
+        return userMapper.detail(id);
+    }
+    public List<NoticeDto.DetailResDto> detailList(List<NoticeDto.DetailResDto> list) {
+        List<NoticeDto.DetailResDto> newList = new ArrayList<>();
+        for(NoticeDto.DetailResDto each : list) {
+            newList.add(get(each.getId()));
+        }
+        return newList;
+    }
     @Override
     public NoticeDto.DetailResDto detail(Long id) {
-        NoticeDto.DetailResDto returnVal = noticeMapper.detail(id);
-        return returnVal;
+        return get(id);
     }
-
     @Override
     public List<NoticeDto.DetailResDto> list(NoticeDto.ListReqDto param) {
-        List<NoticeDto.DetailResDto> list = noticeMapper.list(param);
-        return list;
+        return detailList(userMapper.list(param));
+    }
+
+    @Override
+    public DefaultDto.PagedListResDto pagedList(NoticeDto.PagedListReqDto param){
+        DefaultDto.PagedListResDto retrunVal = DefaultDto.PagedListResDto.init(param, userMapper.pagedListCount(param));
+        retrunVal.setList(detailList(userMapper.pagedList(param)));
+        return retrunVal;
     }
     @Override
-    public NoticeDto.PagedListResDto pagedList(NoticeDto.PagedListReqDto param) {
-
-        //총 등록수 예) 22개
-        int countList = noticeMapper.pagedListCount(param);
-        //요청 페이지 예) 3페이지
-        int callpage = param.getCallpage();
-        //요청 페이지가 1보다 작을때 1로 변환
-        if(callpage < 1) { callpage = 1; }
-
-
-        //한번에 볼 페이지수 예) 5개씩
-        int perpage = param.getPerpage();
-        int offset = (callpage - 1) * perpage;
-
-        // 총 페이지수
-        int countPage = (int) countList / perpage;
-        if(countList % perpage > 0){
-            countPage++;
+    public List<NoticeDto.DetailResDto> scrollList(NoticeDto.ScrollListReqDto param){
+        param.init();
+        Long cursor = param.getCursor();
+        if(cursor != null){
+            Notice user = userRepository.findById(cursor).orElseThrow(() -> new RuntimeException(""));
+            param.setCreatedAt(user.getCreatedAt() + "");
         }
-        //요청 페이지가 총 페이지수보다 클때 총 페이지수로 변환
-        if(callpage > countPage) { callpage = countPage; }
-
-        param.setOffset(offset);
-        List<NoticeDto.DetailResDto> list = noticeMapper.pagedList(param);
-
-        return NoticeDto.PagedListResDto.builder().countList(countList).callpage(callpage).countPage(countPage).list(list).build();
+        return detailList(userMapper.scrollList(param));
     }
-
 
 }

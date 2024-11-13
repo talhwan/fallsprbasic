@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head th:replace="~{@{includes/admin/head}}"></head>
+</head>
+<body>
+
+<div id="wrapper">
+    <body th:replace="~{@{includes/admin/nav}}"></body>
+    <script>
+        $(".sidemenu_li_notice").addClass("active");
+    </script>
+    <div id="page-wrapper" class="gray-bg dashbard-1">
+        <body th:replace="~{@{includes/admin/navbar_top}}"></body>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>공지사항 신규</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/admin">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/notice/admin_list">커뮤니티 관리</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/notice/admin_list">공지사항 목록</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <strong>공지사항 신규</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-lg-2">
+            </div>
+        </div>
+
+        <div class="animated fadeInRight" style="padding-top:12.5px;padding-bottom:0px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox-title">
+                        <h5>신규 등록</h5>
+                    </div>
+                    <div class="ibox-content" style="padding-bottom:0.1px;">
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">*제목</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="input_required form-control m-b" id="create_notice_title" keyword="title" placeholder="제목을 입력해주세요!" errormsg="필수값입니다."/>
+                            </div>
+                            <label class="col-sm-6"></label>
+
+                            <label class="col-sm-2 col-form-label">내용</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control m-b" id="create_notice_password" keyword="password" placeholder="비밀번호를 입력해주세요!" errormsg="필수값입니다."></textarea>
+                            </div>
+
+                            <label class="col-sm-2 col-form-label">
+                                대표사진
+                                <input class="hide" type="file" id="input_file" onchange="readInputFile(this)"/>
+                                <button class="btn btn-sm btn-default" onclick='$("#input_file").trigger("click")'>불러오기</button>
+                            </label>
+                            <div class="col-sm-2">
+                                <img class="img-responsive" id="img_input_file" alt="" src="" />
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control m-b" id="create_notice_imgtext" keyword="imgtext" placeholder="대표사진을 입력해주세요!" />
+                            </div>
+                        </div>
+                        <div class="m-b" style="text-align: right;">
+                            <button class="btn btn-primary btn-sm" onclick="create_tbnotice()">등록하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var tempFile = null;
+            function readInputFile(input) {
+                if (input.files && input.files[0]) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(input.files[0]);
+                    reader.onload = function(e) {
+                        $("#img_input_file").attr("src", URL.createObjectURL(input.files[0]));
+                        $("#create_notice_imgtext").val(input.files[0].name);
+                        /*alert(JSON.stringify(input.files[0]));*/
+                        tempFile = input.files[0];
+                    }
+                }
+            }
+        </script>
+        <script>
+            $( document ).ready(function() {
+                console.log( "ready!" );
+            });
+            function create_tbnotice(){
+                if(!listenerBeforeCreate()){
+                    return false;
+                }
+                let _param = {
+                    'title' : $("#create_notice_title").val(),
+                    'content' : $("#create_notice_content").val(),
+                    'imgfile' : tempFile
+                };
+
+                $.ajax({
+                    url: "/api/notice",
+                    type: "POST",
+                    contentType : 'application/json',
+                    //data: _param,
+                    data: JSON.stringify(_param),
+                    cache: false,
+                    success: (obj_data, status, xhr)=>{
+                        alert(JSON.stringify(obj_data));
+                    },
+                    error: (obj_data, status, xhr)=>{
+                        alert("error!!");
+                        alert(JSON.stringify(obj_data));
+                    }
+                });
+
+            }
+        </script>
+        <body th:replace="~{@{includes/admin/footer}}"></body>
+    </div>
+    <body th:replace="~{@{includes/admin/right_sidebar}}"></body>
+</div>
+<body th:replace="~{@{includes/admin/bottom}}"></body>
+</body>
+</html>

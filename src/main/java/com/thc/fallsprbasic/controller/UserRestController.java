@@ -45,7 +45,7 @@ public class UserRestController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/detail")
+    @GetMapping("")
     public ResponseEntity<UserDto.DetailResDto> detail(@RequestParam Long id){
         return ResponseEntity.ok(userService.detail(id));
     }

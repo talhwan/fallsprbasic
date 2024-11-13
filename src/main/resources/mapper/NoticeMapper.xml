@@ -1,54 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thc.fallsprbasic.mapper.NoticeMapper">
+
+	<!---->
+
 	<select id="detail" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
 		SELECT notice.id
-		     , notice.deleted
-		     , notice.created_at as createdAt
-			 ,SUBSTRING(notice.created_at, 1, 19) as createdAtDateTime
-		     , notice.modified_at as modifiedAt
+			 , notice.deleted
+			 , notice.created_at as createdAt
+			 , notice.modified_at as modifiedAt
 			 , notice.title
 			 , notice.content
+			 , notice.img
 		FROM notice
 		WHERE notice.id = #{id}
 	</select>
-
 	<select id="list" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
 		SELECT notice.id
-			, notice.deleted
-			, notice.created_at as createdAt
-			, notice.modified_at as modifiedAt
-			, notice.title
-			, notice.content
 		FROM notice
 		WHERE notice.id is not NULL
 		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		<if test = "sdate != null and sdate !=''">AND notice.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= notice.created_at</if>
 		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
-		ORDER BY notice.created_at DESC
 	</select>
 
 	<select id="pagedList" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
 		SELECT notice.id
-			, notice.deleted
-			, notice.created_at as createdAt
-			, notice.modified_at as modifiedAt
-			, notice.title
-			, notice.content
 		FROM notice
 		WHERE notice.id is not NULL
-		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		<if test = "deleted != null">AND notice.deleted = #{deleted}</if>
+		<if test = "sdate != null and sdate !=''">AND notice.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= notice.created_at</if>
 		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
-		ORDER BY notice.created_at DESC
+		<if test = "orderby != null and orderby =='created_at'">ORDER BY notice.created_at</if>
+		<if test = "orderby != null and orderby =='title'">ORDER BY notice.title </if>
+		<if test = "orderway != null and orderway =='desc'"> DESC</if>
+		<if test = "orderway != null and orderway =='asc'"> ASC</if>
 		LIMIT #{offset}, #{perpage}
 	</select>
-
 	<select id="pagedListCount" parameterType="hashMap" resultType="Integer">
 		SELECT count(notice.id) as listsize
 		FROM notice
 		WHERE notice.id is not NULL
-		<if test = "deleted != null and deleted !=''">AND notice.deleted = #{deleted}</if>
+		<if test = "deleted != null">AND notice.deleted = #{deleted}</if>
+		<if test = "sdate != null and sdate !=''">AND notice.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= notice.created_at</if>
 		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
 	</select>
 
+	<select id="scrollList" parameterType="hashMap" resultType="com.thc.fallsprbasic.dto.NoticeDto$DetailResDto">
+		SELECT notice.id
+		FROM notice
+		WHERE notice.id is not NULL
+		<if test = "deleted != null">AND notice.deleted = #{deleted}</if>
+		<if test = "sdate != null and sdate !=''">AND notice.created_at >= CONCAT(#{sdate}, ' 00:00:00.000000')</if>
+		<if test = "fdate != null and fdate !=''">AND CONCAT(#{fdate}, ' 23:59:59.999999') >= notice.created_at</if>
+		<if test = "title != null and title !=''">AND notice.title LIKE CONCAT('%', #{title}, '%')</if>
+		<if test = "orderway != null and orderway =='desc'">
+			<if test = "createdAt != null and createdAt !=''">AND #{createdAt} > notice.created_at</if>
+			ORDER BY notice.created_at DESC
+		</if>
+		<if test = "orderway != null and orderway =='asc'">
+			<if test = "createdAt != null and createdAt !=''">AND notice.created_at > #{createdAt}</if>
+			ORDER BY notice.created_at ASC
+		</if>
+		LIMIT 0, #{perpage}
+	</select>
 
 </mapper>
