@@ -13,7 +13,7 @@ public class NoticeDto {
     public static class CreateReqDto extends DefaultDto.CreateReqDto {
         private String title;
         private String content;
-        /*private MultipartFile imgfile;*/
+        private MultipartFile imgfile;
         private String img;
 
         public Notice toEntity(){

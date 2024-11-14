@@ -3,6 +3,7 @@ package com.thc.fallsprbasic.controller;
 import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.service.NoticeService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,13 +24,10 @@ public class NoticeRestController {
     /**/
 
     @PostMapping("")
-    public ResponseEntity<DefaultDto.CreateResDto> create(
-            /*@RequestPart NoticeDto.CreateReqDto param,
-            @RequestPart(required = false) MultipartFile imgfile*/
-            @RequestBody NoticeDto.CreateReqDto param
+    public ResponseEntity<DefaultDto.CreateResDto> create(@RequestPart NoticeDto.CreateReqDto param
+            ,@RequestPart(required = false) MultipartFile imgfile
     ){
-        /*String filename = imgfile.getOriginalFilename();
-        System.out.println("file : " + filename);*/
+        if(imgfile !=null && !imgfile.isEmpty()){param.setImgfile(imgfile);}
         return ResponseEntity.ok(noticeService.create(param));
     }
     @PutMapping("")

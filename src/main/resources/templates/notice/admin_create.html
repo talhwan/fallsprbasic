@@ -98,17 +98,21 @@
                 }
                 let _param = {
                     'title' : $("#create_notice_title").val(),
-                    'content' : $("#create_notice_content").val(),
-                    'imgfile' : tempFile
+                    'content' : $("#create_notice_content").val()
                 };
+                let formData = new FormData();
+                formData.append('imgfile', tempFile);
+                formData.append('param', new Blob([JSON.stringify(_param)], {
+                    type: "application/json; charset=utf-8"
+                }));
 
                 $.ajax({
                     url: "/api/notice",
                     type: "POST",
-                    contentType : 'application/json',
-                    //data: _param,
-                    data: JSON.stringify(_param),
+                    contentType: false,
+                    data: formData,
                     cache: false,
+                    processData : false,
                     success: (obj_data, status, xhr)=>{
                         alert(JSON.stringify(obj_data));
                     },

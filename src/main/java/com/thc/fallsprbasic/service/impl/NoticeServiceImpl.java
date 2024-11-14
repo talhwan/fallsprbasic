@@ -6,8 +6,10 @@ import com.thc.fallsprbasic.dto.NoticeDto;
 import com.thc.fallsprbasic.mapper.NoticeMapper;
 import com.thc.fallsprbasic.repository.NoticeRepository;
 import com.thc.fallsprbasic.service.NoticeService;
+import com.thc.fallsprbasic.util.FileUpload;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public DefaultDto.CreateResDto create(NoticeDto.CreateReqDto param) {
         System.out.println("create");
+        param.setImg(FileUpload.upload(param.getImgfile()));
         return userRepository.save(param.toEntity()).toCreateResDto();
     }
     @Override
