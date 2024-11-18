@@ -8,13 +8,13 @@
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_notice").addClass("active");
+        $(".sidemenu_li_post").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>공지사항 상세 : <font class="font_notice_title">-</font></h2>
+                <h2>게시글 상세 : <font class="font_post_title">-</font></h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -23,10 +23,10 @@
                         <a href="/notice/admin_list">커뮤니티 관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/notice/admin_list">공지사항 목록</a>
+                        <a href="/post/admin_list">게시글 목록</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>공지사항 상세</strong>
+                        <strong>게시글 상세</strong>
                     </li>
                 </ol>
             </div>
@@ -38,14 +38,14 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox-title">
-                        <h5>#<font class="font_notice_id">-</font></h5>
+                        <h5>#<font class="font_post_id">-</font></h5>
                     </div>
                     <div class="ibox-content" style="padding-bottom:0.1px;">
-                        <input type="hidden" id="detail_notice_id" value="" />
+                        <input type="hidden" id="detail_post_id" value="" />
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">삭제여부</label>
                             <div class="col-sm-4">
-                                <select class="form-control m-b" id="detail_notice_deleted" keyword="deleted" onchange="update_notice(this)">
+                                <select class="form-control m-b" id="detail_post_deleted" keyword="deleted" onchange="update_post(this)">
                                     <option value="false">일반</option>
                                     <option value="true">삭제</option>
                                 </select>
@@ -54,13 +54,13 @@
 
                             <label class="col-sm-2 col-form-label">*제목</label>
                             <div class="col-sm-4">
-                                <input type="text" class="input_required form-control m-b" id="detail_notice_title" keyword="title" placeholder="제목을 입력해주세요!" errormsg="필수값입니다." onchange="update_notice(this)" />
+                                <input type="text" class="input_required form-control m-b" id="detail_post_title" keyword="title" placeholder="제목을 입력해주세요!" errormsg="필수값입니다." onchange="update_post(this)" />
                             </div>
                             <label class="col-sm-6"></label>
 
                             <label class="col-sm-2 col-form-label">내용</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control m-b" id="detail_notice_content" keyword="content" placeholder="비밀번호를 입력해주세요!" errormsg="필수값입니다." onchange="update_notice(this)" ></textarea>
+                                <textarea class="form-control m-b" id="detail_post_content" keyword="content" placeholder="비밀번호를 입력해주세요!" errormsg="필수값입니다." onchange="update_post(this)" ></textarea>
                             </div>
 
                             <label class="col-sm-2 col-form-label">
@@ -69,10 +69,10 @@
                                 <button class="btn btn-sm btn-default" onclick='$("#input_file").trigger("click")'>불러오기</button>
                             </label>
                             <div class="col-sm-2">
-                                <img class="img-responsive" id="img_notice_img" alt="" src="" />
+                                <img class="img-responsive" id="img_post_img" alt="" src="" />
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control m-b" id="detail_notice_img" keyword="img" placeholder="대표사진을 입력해주세요!" readonly="readonly" />
+                                <input type="text" class="form-control m-b" id="detail_post_img" keyword="img" placeholder="대표사진을 입력해주세요!" readonly="readonly" />
                             </div>
 
                         </div>
@@ -88,8 +88,8 @@
                     let reader = new FileReader();
                     reader.readAsDataURL(input.files[0]);
                     reader.onload = function(e) {
-                        /*$("#img_notice_img").attr("src", URL.createObjectURL(input.files[0]));
-                        $("#detail_notice_img").val(input.files[0].name);*/
+                        /*$("#img_post_img").attr("src", URL.createObjectURL(input.files[0]));
+                        $("#detail_post_img").val(input.files[0].name);*/
                         /*alert(JSON.stringify(input.files[0]));*/
                         tempFile = input.files[0];
                         imgfile_upload();
@@ -113,9 +113,9 @@
                             return null;
                         }
                         //alert(JSON.stringify(data));
-                        $("#detail_notice_img").val(data);
-                        $("#img_notice_img").attr("src", "/image/" + data);
-                        update_notice("#detail_notice_img");
+                        $("#detail_post_img").val(data);
+                        $("#img_post_img").attr("src", "/image/" + data);
+                        update_post("#detail_post_img");
                     },
                     error: (data)=>{
                         alert("error")
@@ -126,22 +126,22 @@
         <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
-                detail_notice();
+                detail_post();
             });
 
-            function detail_notice(){
-                let noticeId = getIdFromUrl(null);
+            function detail_post(){
+                let postId = getIdFromUrl(null);
                 let _data = new Map();
-                _data.url = "/api/notice";
+                _data.url = "/api/post";
                 _data.type = "GET";
-                _data.param = {'id':noticeId};
+                _data.param = {'id':postId};
                 _data.success = function(obj_data, obj_status, obj_xhr){
                     //alert(JSON.stringify(obj_data));
                     let detailKeys = Object.keys(obj_data)
                     for (let eachKey of detailKeys){
-                        $(".font_notice_" + eachKey).text(obj_data[eachKey]);
-                        $("#detail_notice_" + eachKey).val(obj_data[eachKey] + "");
-                        $("#img_notice_" + eachKey).attr("src", "/image/" + obj_data[eachKey]);
+                        $(".font_post_" + eachKey).text(obj_data[eachKey]);
+                        $("#detail_post_" + eachKey).val(obj_data[eachKey] + "");
+                        $("#img_post_" + eachKey).attr("src", "/image/" + obj_data[eachKey]);
                     }
 
                 }
@@ -150,9 +150,9 @@
                 }
                 func_ajax(_data);
             }
-            function update_notice(obj){
+            function update_post(obj){
                 let _param = {};
-                _param["id"] = $("#detail_notice_id").val();
+                _param["id"] = $("#detail_post_id").val();
                 if($(obj).attr("keyword") === "deleted"){
                     _param[$(obj).attr("keyword")] = ($(obj).val() === "true");
                 } else {
@@ -161,7 +161,7 @@
                 //alert(_param[$(obj).attr("keyword")]);
 
                 let _data = new Map();
-                _data.url = "/api/notice";
+                _data.url = "/api/post";
                 _data.type = "PUT";
                 _data.param = _param;
                 _data.success = function(obj_data, obj_status, obj_xhr){

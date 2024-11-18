@@ -35,7 +35,6 @@ public class FileUpload {
 
             FileCopyUtils.copy(file.getBytes(), new File(filePath + returnValue));
         } catch (Exception e){
-
         }
         return returnValue;
     }

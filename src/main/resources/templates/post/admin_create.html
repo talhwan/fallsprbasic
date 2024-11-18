@@ -5,16 +5,29 @@
 </head>
 <body>
 
+<script id="list_info_postimg" type="text/x-handlebars-template">
+    {{#resultData_postimg}}
+    <div class="col-sm-3" id="div_post_imgs_{{order}}">
+        <img class="img-responsive" id="img_post_img_{{order}}" alt="" src="{{src}}" />
+        <div onclick="listener_delete_img('{{order}}')">삭제</div>
+    </div>
+    {{/resultData_postimg}}
+</script>
+<script type="text/javascript">
+    var list_info_postimg = $("#list_info_postimg").html();
+    var list_info_postimg_template = Handlebars.compile(list_info_postimg);
+</script>
+
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_notice").addClass("active");
+        $(".sidemenu_li_post").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>공지사항 신규</h2>
+                <h2>게시글 신규</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -23,10 +36,10 @@
                         <a href="/notice/admin_list">커뮤니티 관리</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="/notice/admin_list">공지사항 목록</a>
+                        <a href="/post/admin_list">게시글 목록</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>공지사항 신규</strong>
+                        <strong>게시글 신규</strong>
                     </li>
                 </ol>
             </div>
@@ -44,13 +57,13 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">*제목</label>
                             <div class="col-sm-4">
-                                <input type="text" class="input_required form-control m-b" id="create_notice_title" keyword="title" placeholder="제목을 입력해주세요!" errormsg="필수값입니다."/>
+                                <input type="text" class="input_required form-control m-b" id="create_post_title" keyword="title" placeholder="제목을 입력해주세요!" errormsg="필수값입니다."/>
                             </div>
                             <label class="col-sm-6"></label>
 
                             <label class="col-sm-2 col-form-label">내용</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control m-b" id="create_notice_content" keyword="content" placeholder="내용을 입력해주세요!" errormsg="필수값입니다."></textarea>
+                                <textarea class="form-control m-b" id="create_post_content" keyword="content" placeholder="내용을 입력해주세요!" errormsg="필수값입니다."></textarea>
                             </div>
 
                             <label class="col-sm-2 col-form-label">
@@ -58,15 +71,12 @@
                                 <input class="hide" type="file" id="input_file" onchange="readInputFile(this)"/>
                                 <button class="btn btn-sm btn-default" onclick='$("#input_file").trigger("click")'>불러오기</button>
                             </label>
-                            <div class="col-sm-2">
-                                <img class="img-responsive" id="img_input_file" alt="" src="" />
+                            <div class="col-sm-10 row" id="div_post_imgs">
                             </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control m-b" id="create_notice_imgtext" keyword="imgtext" placeholder="대표사진을 입력해주세요!" readonly="readonly"/>
-                            </div>
+
                         </div>
                         <div class="m-b" style="text-align: right;">
-                            <button class="btn btn-primary btn-sm" onclick="create_tbnotice()">등록하기</button>
+                            <button class="btn btn-primary btn-sm" onclick="create_tbpost()">등록하기</button>
                         </div>
                     </div>
                 </div>
@@ -74,40 +84,58 @@
         </div>
 
         <script>
-            var tempFile = null;
+            var tempOrder = 0;
+            var tempFiles = [];
+            var tempExists = [];
             function readInputFile(input) {
                 if (input.files && input.files[0]) {
                     let reader = new FileReader();
                     reader.readAsDataURL(input.files[0]);
                     reader.onload = function(e) {
-                        $("#img_input_file").attr("src", URL.createObjectURL(input.files[0]));
-                        $("#create_notice_imgtext").val(input.files[0].name);
-                        /*alert(JSON.stringify(input.files[0]));*/
-                        tempFile = input.files[0];
+                        let tempFile = input.files[0];
+                        tempFiles.push(tempFile);
+                        tempExists.push(true);
+                        let tList = [];
+                        let eachData = {};
+                        eachData["order"] = tempOrder++;
+                        eachData["src"] = URL.createObjectURL(input.files[0]);
+                        tList.push(eachData);
+                        $("#div_post_imgs").append(list_info_postimg_template({"resultData_postimg":tList}));
                     }
                 }
+            }
+        </script>
+        <script>
+            function listener_delete_img(obj_order){
+                $("#div_post_imgs_" + obj_order).remove();
+                tempExists[Number(obj_order)] = false;
             }
         </script>
         <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
             });
-            function create_tbnotice(){
+            function create_tbpost(){
                 if(!listenerBeforeCreate()){
                     return false;
                 }
-                let _param = {
-                    'title' : $("#create_notice_title").val(),
-                    'content' : $("#create_notice_content").val()
-                };
+
                 let formData = new FormData();
-                formData.append('imgfile', tempFile);
+                for(let i=0;i<tempFiles.length;i++){
+                    if(tempExists[i]){
+                        formData.append('imgfile', tempFiles[i]);
+                    }
+                }
+                let _param = {
+                    'title' : $("#create_post_title").val(),
+                    'content' : $("#create_post_content").val()
+                };
                 formData.append('param', new Blob([JSON.stringify(_param)], {
                     type: "application/json; charset=utf-8"
                 }));
 
                 $.ajax({
-                    url: "/api/notice",
+                    url: "/api/post",
                     type: "POST",
                     contentType: false,
                     data: formData,
@@ -121,7 +149,6 @@
                         alert(JSON.stringify(obj_data));
                     }
                 });
-
             }
         </script>
         <body th:replace="~{@{includes/admin/footer}}"></body>

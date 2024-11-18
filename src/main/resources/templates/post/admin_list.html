@@ -5,15 +5,15 @@
 </head>
 <body>
 
-<script id="list_info_notice" type="text/x-handlebars-template">
-    {{#resultData_notice}}
+<script id="list_info_post" type="text/x-handlebars-template">
+    {{#resultData_post}}
     <tr class="gradeA">
         <td>
             <input class="input_chk_delete_each" type="checkbox" keyword="{{id}}" id="input_chk_delete_each_{{id}}" onclick="listener_chk_delete(this)" />
         </td>
         <td><font class="font_order"></font></td>
         <td><font class="font_deleted_{{deleted}} chk_deleted_{{id}}">{{deleted}}</font></td>
-        <td class="cursor_pointer" onclick="location.href='/notice/admin_detail/{{id}}';">{{title}}</td>
+        <td class="cursor_pointer" onclick="location.href='/post/admin_detail/{{id}}';">{{title}}</td>
         <td>{{createdAt}} / {{modifiedAt}}
             <div class="hide">
                 <input class="input_cursor_createdAt" value="{{createdAt}}"/>
@@ -21,23 +21,23 @@
             </div>
         </td>
     </tr>
-    {{/resultData_notice}}
+    {{/resultData_post}}
 </script>
 <script type="text/javascript">
-    var list_info_notice = $("#list_info_notice").html();
-    var list_info_notice_template = Handlebars.compile(list_info_notice);
+    var list_info_post = $("#list_info_post").html();
+    var list_info_post_template = Handlebars.compile(list_info_post);
 </script>
 
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
-        $(".sidemenu_li_notice").addClass("active");
+        $(".sidemenu_li_post").addClass("active");
     </script>
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <body th:replace="~{@{includes/admin/navbar_top}}"></body>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>공지사항 목록</h2>
+                <h2>게시글 목록</h2>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="/admin">Home</a>
@@ -46,7 +46,7 @@
                         <a href="/notice/admin_list">커뮤니티 관리</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <strong>공지사항 목록</strong>
+                        <strong>게시글 목록</strong>
                     </li>
                 </ol>
             </div>
@@ -62,7 +62,7 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">삭제여부</label>
                             <div class="col-sm-4">
-                                <select class="select_search_keyword form-control m-b" keyword="deleted" id="search_notice_deleted" onchange="listener_keyword_changed()">
+                                <select class="select_search_keyword form-control m-b" keyword="deleted" id="search_post_deleted" onchange="listener_keyword_changed()">
                                     <option value="" selected="selected">전체</option>
                                     <option value="false">일반</option>
                                     <option value="true">삭제</option>
@@ -92,8 +92,8 @@
                                 </select>
                             </div>
                             <div class="col-sm-6">
-                                <input id="search_notice_title" onchange="listener_keyword_changed();" class="form-control search_keyword_each search_keyword_each_10" type="text" placeholder="내용을 입력하세요"/>
-                                <!--<input id="search_notice_phone" onchange="listener_keyword_changed();" class="form-control search_keyword_each search_keyword_each_20 hide" type="text" placeholder="내용을 입력하세요"/>-->
+                                <input id="search_post_title" onchange="listener_keyword_changed();" class="form-control search_keyword_each search_keyword_each_10" type="text" placeholder="내용을 입력하세요"/>
+                                <!--<input id="search_post_phone" onchange="listener_keyword_changed();" class="form-control search_keyword_each search_keyword_each_20 hide" type="text" placeholder="내용을 입력하세요"/>-->
                             </div>
 
                             <input type="hidden" id="cursor" />
@@ -138,25 +138,25 @@
                         <th>입력일시/수정일시</th>
                     </tr>
                     </thead>
-                    <tbody id="tbody_notice_list">
+                    <tbody id="tbody_post_list">
                     </tbody>
                 </table>
                 <table style="width:100%">
                     <tr>
                         <td>
-                            <button class="btn btn-danger btn-sm" onclick="delete_notice()">일괄삭제</button>
+                            <button class="btn btn-danger btn-sm" onclick="delete_post()">일괄삭제</button>
                         </td>
                         <td id="div_page_number">
                         </td>
                         <td style="text-align: right;">
-                            <button class="btn btn-default btn-sm" onclick="location.href='/notice/admin_create'">추가하기</button>
+                            <button class="btn btn-default btn-sm" onclick="location.href='/post/admin_create'">추가하기</button>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
         <script>
-            function delete_notice(){
+            function delete_post(){
                 if (confirm("정말 삭제하시겠습니까?")) {
                 } else {
                     alert("취소");
@@ -164,13 +164,13 @@
                 }
                 let ids = listenerGetDeleteIds();
                 let _data = new Map();
-                _data.url = "/api/notice/list";
+                _data.url = "/api/post/list";
                 _data.type = "DELETE";
                 _data.param = {
                     'ids' : ids
                 };
                 _data.success = function(obj_data, obj_status, obj_xhr){
-                    search_notice();
+                    search_post();
                 }
                 _data.error = function(obj_data, obj_status, obj_xhr){
                     alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
@@ -181,26 +181,26 @@
         <script>
             $( document ).ready(function() {
                 console.log( "ready!" );
-                search_notice();
+                search_post();
             });
         </script>
 
         <script>
             function listener_keyword_changed(){
                 $("#input_keyword_changed").val("1");
-                search_notice();
+                search_post();
             }
             function listener_callpage(obj_num){
                 $("#search_callpage").val(obj_num);
-                search_notice();
+                search_post();
             }
-            function search_notice() {
-                let notice_deleted = null;
-                if($("#search_notice_deleted").val() !== ""){
-                    notice_deleted = ($("#search_notice_deleted").val() === "true");
+            function search_post() {
+                let post_deleted = null;
+                if($("#search_post_deleted").val() !== ""){
+                    post_deleted = ($("#search_post_deleted").val() === "true");
                 }
                 $.ajax({
-                    url: "/api/notice/plist",
+                    url: "/api/post/plist",
                     type: "GET",
                     contentType : 'application/json; charset=utf-8',
                     data: {
@@ -212,18 +212,18 @@
                         , sdate : $("#search_sdate").val()
                         , fdate : $("#search_fdate").val()
 
-                        , deleted : notice_deleted
-                        , title : $("#search_notice_title").val()
+                        , deleted : post_deleted
+                        , title : $("#search_post_title").val()
                     },
                     cache: false,
                     success: (obj_data, status, xhr)=>{
-                        $("#tbody_notice_list").html("");
+                        $("#tbody_post_list").html("");
                         $("#div_page_number").html("");
                         let tempList = obj_data["list"];
                         for(let each of tempList){
                             let tList = [];
                             tList.push(each);
-                            $("#tbody_notice_list").append(list_info_notice_template({"resultData_notice":tList}));
+                            $("#tbody_post_list").append(list_info_post_template({"resultData_post":tList}));
                         }
                         $("#info_total_itemcount").val(obj_data["itemcount"]);
                         $("#info_total_pagecount").val(obj_data["pagecount"]);
