@@ -5,6 +5,19 @@
 </head>
 <body>
 
+<script id="list_info_postimg" type="text/x-handlebars-template">
+    {{#resultData_postimg}}
+    <div class="col-sm-3" id="div_post_imgs_{{order}}">
+        <img class="img-responsive" id="img_post_img_{{order}}" alt="" src="{{src}}" />
+        <div onclick="listener_delete_img('{{order}}')">삭제</div>
+    </div>
+    {{/resultData_postimg}}
+</script>
+<script type="text/javascript">
+    var list_info_postimg = $("#list_info_postimg").html();
+    var list_info_postimg_template = Handlebars.compile(list_info_postimg);
+</script>
+
 <div id="wrapper">
     <body th:replace="~{@{includes/admin/nav}}"></body>
     <script>
@@ -68,10 +81,13 @@
                                 <input class="hide" type="file" id="input_file" onchange="readInputFile(this)"/>
                                 <button class="btn btn-sm btn-default" onclick='$("#input_file").trigger("click")'>불러오기</button>
                             </label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-10 row" id="div_post_imgs">
+                            </div>
+
+                            <div class="col-sm-2 hide">
                                 <img class="img-responsive" id="img_post_img" alt="" src="" />
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-8 hide">
                                 <input type="text" class="form-control m-b" id="detail_post_img" keyword="img" placeholder="대표사진을 입력해주세요!" readonly="readonly" />
                             </div>
 
@@ -88,39 +104,60 @@
                     let reader = new FileReader();
                     reader.readAsDataURL(input.files[0]);
                     reader.onload = function(e) {
-                        /*$("#img_post_img").attr("src", URL.createObjectURL(input.files[0]));
-                        $("#detail_post_img").val(input.files[0].name);*/
-                        /*alert(JSON.stringify(input.files[0]));*/
                         tempFile = input.files[0];
-                        imgfile_upload();
+                        createPostimg();
                     }
                 }
             }
-            function imgfile_upload() {
-                let fileData = new FormData();
-                fileData.append("file", tempFile);
+            function createPostimg() {
+
+                let _param = {
+                    'postId' : $("#detail_post_id").val()
+                };
+                let formData = new FormData();
+                formData.append('imgfile', tempFile);
+                formData.append('param', new Blob([JSON.stringify(_param)], {
+                    type: "application/json; charset=utf-8"
+                }));
 
                 $.ajax({
-                    url: "/api/upload",
+                    url: "/api/postimg",
                     type: "POST",
-                    data: fileData,
-                    cache : false,
-                    contentType : false,
+                    contentType: false,
+                    data: formData,
+                    cache: false,
                     processData : false,
-                    success: (data, status, xhr)=>{
-                        if(data == null){
-                            alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요!");
-                            return null;
-                        }
-                        //alert(JSON.stringify(data));
-                        $("#detail_post_img").val(data);
-                        $("#img_post_img").attr("src", "/image/" + data);
-                        update_post("#detail_post_img");
+                    success: (obj_data, status, xhr)=>{
+                        let tList = [];
+                        let eachData = {};
+                        eachData["order"] = obj_data["id"];
+                        eachData["src"] = "/image/" + obj_data["url"];
+                        tList.push(eachData);
+                        $("#div_post_imgs").append(list_info_postimg_template({"resultData_postimg":tList}));
                     },
-                    error: (data)=>{
-                        alert("error")
-                    },
+                    error: (obj_data, status, xhr)=>{
+                        alert("error!!");
+                        alert(JSON.stringify(obj_data));
+                    }
                 });
+            }
+        </script>
+        <script>
+            function listener_delete_img(obj_order){
+                let _param = {};
+                _param["id"] = obj_order;
+
+                let _data = new Map();
+                _data.url = "/api/postimg";
+                _data.type = "DELETE";
+                _data.param = _param;
+                _data.success = function(obj_data, obj_status, obj_xhr){
+                    $("#div_post_imgs_" + obj_order).remove();
+                }
+                _data.error = function(obj_data, obj_status, obj_xhr){
+                    alert("정상적으로 이루어지지 않았습니다. 다시 시도해주세요.");
+                }
+                func_ajax(_data);
             }
         </script>
         <script>
@@ -142,6 +179,17 @@
                         $(".font_post_" + eachKey).text(obj_data[eachKey]);
                         $("#detail_post_" + eachKey).val(obj_data[eachKey] + "");
                         $("#img_post_" + eachKey).attr("src", "/image/" + obj_data[eachKey]);
+                    }
+
+                    let imgs = obj_data["imgs"];
+                    //alert(imgs.length);
+                    for(let each of imgs){
+                        let tList = [];
+                        let eachData = {};
+                        eachData["order"] = each["id"];
+                        eachData["src"] = "/image/" + each["url"];
+                        tList.push(eachData);
+                        $("#div_post_imgs").append(list_info_postimg_template({"resultData_postimg":tList}));
                     }
 
                 }

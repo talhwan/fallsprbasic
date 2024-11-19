@@ -3,11 +3,14 @@ package com.thc.fallsprbasic.service.impl;
 import com.thc.fallsprbasic.domain.Post;
 import com.thc.fallsprbasic.dto.DefaultDto;
 import com.thc.fallsprbasic.dto.PostDto;
+import com.thc.fallsprbasic.dto.PostimgDto;
 import com.thc.fallsprbasic.mapper.PostMapper;
 import com.thc.fallsprbasic.repository.PostRepository;
 import com.thc.fallsprbasic.service.PostService;
+import com.thc.fallsprbasic.service.PostimgService;
 import com.thc.fallsprbasic.util.FileUpload;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +18,17 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private final PostRepository userRepository;
-    private final PostMapper userMapper;
+    private final PostRepository postRepository;
+    private final PostimgService postimgService;
+    private final PostMapper postMapper;
     public PostServiceImpl(
-            PostRepository userRepository
-            , PostMapper userMapper
+            PostRepository postRepository
+            , PostimgService postimgService
+            , PostMapper postMapper
     ) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
+        this.postRepository = postRepository;
+        this.postimgService = postimgService;
+        this.postMapper = postMapper;
     }
 
     /**/
@@ -30,22 +36,31 @@ public class PostServiceImpl implements PostService {
     @Override
     public DefaultDto.CreateResDto create(PostDto.CreateReqDto param) {
         System.out.println("create");
-        return userRepository.save(param.toEntity()).toCreateResDto();
+        DefaultDto.CreateResDto res = postRepository.save(param.toEntity()).toCreateResDto();
+
+        List<MultipartFile> imgs = param.getImgs();
+        if(imgs != null && !imgs.isEmpty()) {
+            for(MultipartFile each : imgs){
+                postimgService.create(PostimgDto.CreateReqDto.builder().postId(res.getId()).imgfile(each).build());
+            }
+        }
+
+        return res;
     }
     @Override
     public void update(PostDto.UpdateReqDto param) {
         System.out.println("update");
-        Post user = userRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
+        Post post = postRepository.findById(param.getId()).orElseThrow(() -> new RuntimeException(""));
         if(param.getDeleted() != null) {
-            user.setDeleted(param.getDeleted());
+            post.setDeleted(param.getDeleted());
         }
         if(param.getTitle() != null) {
-            user.setTitle(param.getTitle());
+            post.setTitle(param.getTitle());
         }
         if(param.getContent() != null) {
-            user.setContent(param.getContent());
+            post.setContent(param.getContent());
         }
-        userRepository.save(user);
+        postRepository.save(post);
     }
     @Override
     public void delete(Long id) {
@@ -59,7 +74,10 @@ public class PostServiceImpl implements PostService {
     }
 
     public PostDto.DetailResDto get(Long id) {
-        return userMapper.detail(id);
+        PostDto.DetailResDto res = postMapper.detail(id);
+        if(res == null) { throw new RuntimeException("no data"); }
+        res.setImgs(postimgService.list(PostimgDto.ListReqDto.builder().deleted(false).postId(res.getId()).build()));
+        return res;
     }
     public List<PostDto.DetailResDto> detailList(List<PostDto.DetailResDto> list) {
         List<PostDto.DetailResDto> newList = new ArrayList<>();
@@ -74,13 +92,13 @@ public class PostServiceImpl implements PostService {
     }
     @Override
     public List<PostDto.DetailResDto> list(PostDto.ListReqDto param) {
-        return detailList(userMapper.list(param));
+        return detailList(postMapper.list(param));
     }
 
     @Override
     public DefaultDto.PagedListResDto pagedList(PostDto.PagedListReqDto param){
-        DefaultDto.PagedListResDto retrunVal = DefaultDto.PagedListResDto.init(param, userMapper.pagedListCount(param));
-        retrunVal.setList(detailList(userMapper.pagedList(param)));
+        DefaultDto.PagedListResDto retrunVal = DefaultDto.PagedListResDto.init(param, postMapper.pagedListCount(param));
+        retrunVal.setList(detailList(postMapper.pagedList(param)));
         return retrunVal;
     }
     @Override
@@ -88,10 +106,10 @@ public class PostServiceImpl implements PostService {
         param.init();
         Long cursor = param.getCursor();
         if(cursor != null){
-            Post user = userRepository.findById(cursor).orElseThrow(() -> new RuntimeException(""));
-            param.setCreatedAt(user.getCreatedAt() + "");
+            Post post = postRepository.findById(cursor).orElseThrow(() -> new RuntimeException(""));
+            param.setCreatedAt(post.getCreatedAt() + "");
         }
-        return detailList(userMapper.scrollList(param));
+        return detailList(postMapper.scrollList(param));
     }
 
 }

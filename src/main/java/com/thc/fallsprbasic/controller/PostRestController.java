@@ -28,7 +28,7 @@ public class PostRestController {
             @RequestPart PostDto.CreateReqDto param
             ,@RequestPart(required = false) List<MultipartFile> imgfile
     ){
-        System.out.println("imgfile : " + imgfile.size());
+        if(imgfile != null && !imgfile.isEmpty()){param.setImgs(imgfile);}
         return ResponseEntity.ok(postService.create(param));
     }
     @PutMapping("")

@@ -64,6 +64,9 @@ public class DefaultDto {
     @Getter
     public static class ListReqDto {
         private Boolean deleted;
+
+        private String sdate; //검색일 시작
+        private String fdate; //검색일 종료
     }
 
     @AllArgsConstructor @NoArgsConstructor @SuperBuilder @Setter @Getter
